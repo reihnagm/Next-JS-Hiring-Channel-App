@@ -1,0 +1,49 @@
+@import "variable"
+.container
+  width: $container-size
+  margin: 0 auto
+.columns
+  display: flex
+  &.is-multiline
+    flex-wrap: wrap
+.column
+  display: block
+  flex: 1 1 0
+  margin: $default-margin
+  padding: $default-padding
+  &:first-child
+    margin-left: 0
+  &:last-child
+    margin-right: 0
+  &.is-full
+    width: 100%
+    flex: none
+  &.is-four-fifths
+    width: 80%
+  &.is-three-quarters
+    width: 75%
+    flex: none
+  &.is-two-third
+    width: 66.666%
+    flex: none
+  &.is-half
+    width: 50%
+    flex: none
+  &.is-two-fifths
+    flex: none
+    width: 40%
+  &.is-one-third
+    width: 33.33%
+    flex: none
+  &.is-one-quarter
+    width: 25%
+    flex: none
+  &.is-one-fifth
+    width: 20%
+    flex: none
+  &.is-offset-one-quarter
+    margin-left: 25%
+  &.is-offset-one-fifth
+    margin-left: 20%
+.is-fullwidth
+  width: 100%

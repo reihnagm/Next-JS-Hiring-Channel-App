@@ -1,0 +1,126 @@
+#search-header {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  border-radius: 5px;
+}
+#cover-background-login {
+  background: linear-gradient(to top right, rgb(200, 115, 242) 0%, rgb(240, 193, 228) 100%);
+}
+#cover-background-register {
+  background: linear-gradient(to top right, rgb(200, 115, 242) 0%, rgb(240, 193, 228) 100%);
+}
+#cover-login {
+  background-image: url("../../assets/cover/cover_auth.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 500px;
+}
+#cover-register {
+  background-image: url("../../assets/cover/cover_auth.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 500px;
+}
+#cover-landing {
+  background-image: url("../../assets/cover/cover_landing.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: relative;
+  height: 400px;
+}
+#top-screen {
+  background-color: rgb(225, 168, 230);
+  max-height: 250px;
+  position: relative;
+}
+#label-sortBy,
+#label-orderBy,
+#label-showPage {
+  color: #000000;
+  margin-right: 10px;
+}
+#header-menu {
+  position: relative;
+}
+#header-menu li a {
+  color: #000000;
+  font-weight: bold;
+  text-decoration: none;
+}
+#dropdown-header {
+  position: absolute;
+  z-index: 1;
+  transition: all 0.25s ease;
+  top: 100%;
+  right: -20%;
+  width: 250px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  box-shadow: 1px 1px 1px #eeeeee;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+#dropdown-header li {
+  display: block;
+  border-bottom: 1px solid #eeeeee;
+}
+#dropdown-header li a {
+  color: #000000;
+  margin-left: 20px;
+}
+.container-direct-message {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding-bottom: 80px;
+}
+.chat-box-left {
+  width: 45%;
+  background-color: #ea80fc;
+}
+.chat-box-right {
+  width: 45%;
+  background-color: #8e24aa;
+}
+.chat-author {
+  background-color: #ab47bc;
+}
+.conversation-lists {
+  background-color: #ea80fc !important;
+  border-radius: 8px !important;
+  outline: none !important;
+  width: 80%;
+  margin: 10rem auto;
+}
+.conversations-item {
+  background-color: #dbdbdb;
+  border-radius: 8px !important;
+}
+.bar-bottom-message {
+  background-color: #d8d8d8;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+}
+.backdrop-top {
+  background-color: #ea80fc;
+  height: 300px;
+  position: fixed;
+  z-index: -1;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+}
+.backdrop-bottom {
+  background-color: #ea80fc;
+  height: 300px;
+  position: fixed;
+  z-index: -1;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}

@@ -1,0 +1,41 @@
+@import "variable"
+.button
+  font-size: 1em
+  text-decoration: none
+  outline: none
+  background-color: $purple
+  border: 1px solid $purple
+  padding: 10px
+  &.is-warning
+    border-color: $warning-color
+    color: $warning-color
+    &:hover
+      background: $warning-color
+      color: #ffffff
+    &.is-danger
+      border-color: $danger-color
+      color: $danger-color
+      &:hover
+        background: $danger-color
+        color: #ffffff
+    &.is-success
+      border-color: $success-color
+      color: $success-color
+      &:hover
+        background: $success-color
+        color: #ffffff
+    &.is-info
+      border-color: $info-color
+      color: $info-color
+      &:hover
+        background: $info-color
+        color: #ffffff
+    &:hover
+      cursor: pointer
+      color: #ffffff
+    &.is-large
+      font-size: 1rem
+    &.is-small
+      font-size: 0.8rem
+.is-fullwidth
+  width: 100%
