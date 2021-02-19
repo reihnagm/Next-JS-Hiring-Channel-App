@@ -91,10 +91,9 @@ const ProfileDetailItem = ({ company }) => {
                           variant="contained"
                           color="primary"
                           onClick={() =>
-                            router.push({
-                              pathname: `/companies/jobs/${company.slug}/edit`,
-                              
-                              query: { slug: company.slug }
+                            router.replace({
+                              pathname: `/companies/jobs/[slug]/edit`,
+                              query: { slug: company.slug },
                             })
                           }
                         >

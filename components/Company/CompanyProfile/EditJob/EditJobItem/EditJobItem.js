@@ -9,7 +9,7 @@ import RemoveIcon from "@material-ui/icons/RemoveCircleOutlineSharp"
 import NumberFormat from "react-number-format"
 import Autocomplete from "@material-ui/lab/Autocomplete"
 
-const EditJobItem = ({ postJob, updatePostJob, allSkills, allJobTypes, history }) => {
+const EditJobItem = ({ postJob, updatePostJob, allSkills, allJobTypes }) => {
   const [formData, setFormData] = useState({
     title: "",
     salary: ""
@@ -52,8 +52,8 @@ const EditJobItem = ({ postJob, updatePostJob, allSkills, allJobTypes, history }
         </span>
       )
     })
-  const onChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+  const onChange = ev => {
+    setFormData({ ...formData, [ev.target.name]: ev.target.value })
   }
   const onEditorChange = content => {
     setContent(content)
@@ -99,8 +99,8 @@ const EditJobItem = ({ postJob, updatePostJob, allSkills, allJobTypes, history }
       <Container fixed>
         <Grid container className="my-5" direction="row" justify="center" alignItems="center">
           <Grid className="p-5 white rounded" item md={8} xs={12}>
-            <form onSubmit={e => onSubmit(e)}>
-              <TextField onChange={onChange} value={title ?? ""} name="title" margin="normal" variant="outlined" label="Title" fullWidth />
+            <form onSubmit={onSubmit}>
+              <TextField onChange={onChange} value={title} name="title" margin="normal" variant="outlined" label="Title" fullWidth />
               <p className="text-gray mb-3">Job Description</p>
               <Editor
                 value={content ?? ""}
@@ -171,7 +171,7 @@ const EditJobItem = ({ postJob, updatePostJob, allSkills, allJobTypes, history }
                 }}
                 renderInput={params => <TextField {...params} margin="normal" label="Job Types" placeholder="Job Types" variant="outlined" fullWidth />}
               />
-              <NumberFormat onChange={onChange} value={salary ?? ""} name="salary" margin="normal" variant="outlined" label="Salary" decimalSeparator="," thousandSeparator="." prefix="IDR " allowNegative={false} customInput={TextField} fullWidth />
+              <NumberFormat onChange={onChange} value={salary} name="salary" margin="normal" variant="outlined" label="Salary" decimalSeparator="," thousandSeparator="." prefix="IDR " allowNegative={false} customInput={TextField} fullWidth />
               <Grid container direction="row" justify="center" alignItems="center">
                 <Button type="button" variant="contained" color="primary" onClick={() => router.back()}>
                   Back

@@ -184,10 +184,10 @@ export const updatePostJob = (payload, router) => async dispatch => {
     await axios.put(process.env.NEXT_PUBLIC_UPDATE_POST_JOB, {
       payload: payload
     })
-    router.push("/companies")
     dispatch({
       type: LOADED
     })
+    router.push("/companies")
     dispatch({
       type: UPDATE_POST_JOB
     })

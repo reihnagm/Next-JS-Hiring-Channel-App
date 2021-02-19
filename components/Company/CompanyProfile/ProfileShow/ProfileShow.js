@@ -12,10 +12,12 @@ const ProfileShow = () => {
   const { company, loading } = useSelector(state => state.company)
   useEffect(() => {
     const fetchData = () => {
-      dispatch(getProfileCompanyBySlug(router.query.slug))
+      if (router.asPath !== router.route) {
+        dispatch(getProfileCompanyBySlug(router.query['job-title']))
+      }
     }
     fetchData()
-  }, [])
+  }, [router])
   return loading ? <Spinner /> : <ProfileShowItem company={company} />
 }
 export default ProfileShow

@@ -46,9 +46,6 @@ const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) 
   </div>
 )
 const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
-  const router = useRouter()
-  const dispatch = useDispatch()
-  let fileRef
   const useStyles = makeStyles(theme => ({
     root: {
       display: "flex",
@@ -72,6 +69,9 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       height: theme.spacing(10)
     }
   }))
+  let fileRef
+  const router = useRouter()
+  const dispatch = useDispatch()
   const classes = useStyles()
   const [isOpen, setIsOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState(new Date())
@@ -124,8 +124,8 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
     )
   })
   const { uid, fullname, nickname, email, description, showcase, telephone, salary } = formData
-  const onChange = event => {
-    setFormData({ ...formData, [event.target.name]: event.target.value })
+  const onChange = ev => {
+    setFormData({ ...formData, [ev.target.name]: ev.target.value })
   }
   const handleDate = value => {
     setSelectedDate(value)
@@ -212,7 +212,7 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       <Container fixed>
         <Grid container className="my-5" direction="row" justify="center" alignItems="center">
           <Grid className="p-5 white rounded" item md={8} xs={12}>
-            <form onSubmit={event => onSubmit(event)}>
+            <form onSubmit={onSubmit}>
               <div className={classes.root}>
                 <Badge
                   overlap="circle"
@@ -242,10 +242,10 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
                   <Avatar className={classes.large} alt={fullname} src={`${avatarDefault}`} />
                 </Badge>
               </div>
-              <TextField onChange={onChange} value={fullname ?? ""} name="fullname" margin="normal" variant="outlined" label="Fullname" fullWidth />
-              <TextField onChange={onChange} value={nickname ?? ""} name="nickname" margin="normal" variant="outlined" label="Nickname" fullWidth />
-              <TextField onChange={onChange} value={email ?? ""} name="email" margin="normal" variant="outlined" label="E-mail Address" fullWidth disabled />
-              <TextField onChange={onChange} value={description ?? ""} multiline rows="4" name="description" margin="normal" variant="outlined" label="Description" fullWidth />
+              <TextField onChange={onChange} value={fullname} name="fullname" margin="normal" variant="outlined" label="Fullname" fullWidth />
+              <TextField onChange={onChange} value={nickname} name="nickname" margin="normal" variant="outlined" label="Nickname" fullWidth />
+              <TextField onChange={onChange} value={email} name="email" margin="normal" variant="outlined" label="E-mail Address" fullWidth disabled />
+              <TextField onChange={onChange} value={description} multiline rows="4" name="description" margin="normal" variant="outlined" label="Description" fullWidth />
               <Autocomplete
                 multiple
                 filterSelectedOptions
@@ -295,9 +295,9 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
                   open={isOpen}
                 />
               </MuiPickersUtilsProvider>
-              <TextField onChange={e => onChange(e)} value={showcase ?? ""} name="showcase" margin="normal" variant="outlined" label="Showcase" fullWidth />
-              <MaskedInput mask={["(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]} placeholderChar={"_"} onChange={e => onChange(e)} render={(ref, props) => <TextField value={telephone ?? ""} name="telephone" margin="normal" variant="outlined" label="Telephone" fullWidth inputRef={ref} {...props} />} />
-              <NumberFormat onChange={e => onChange(e)} value={salary ?? ""} name="salary" margin="normal" variant="outlined" label="salary" decimalSeparator="," thousandSeparator="." prefix="Rp " allowNegative={false} customInput={TextField} fullWidth />
+              <TextField onChange={onChange} value={showcase} name="showcase" margin="normal" variant="outlined" label="Showcase" fullWidth />
+              <MaskedInput mask={["(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]} placeholderChar={"_"} onChange={onChange} render={(ref, props) => <TextField value={telephone} name="telephone" margin="normal" variant="outlined" label="Telephone" fullWidth inputRef={ref} {...props} />} />
+              <NumberFormat onChange={onChange} value={salary} name="salary" margin="normal" variant="outlined" label="salary" decimalSeparator="," thousandSeparator="." prefix="Rp " allowNegative={false} customInput={TextField} fullWidth />
               <Grid container direction="row" justify="center" alignItems="center">
                 <Button type="button" variant="contained" color="primary" onClick={() => router.back()} >
                   Back

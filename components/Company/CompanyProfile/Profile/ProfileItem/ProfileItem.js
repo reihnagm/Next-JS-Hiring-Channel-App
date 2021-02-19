@@ -90,7 +90,7 @@ const ProfileItem = ({ company }) => {
                         variant="contained"
                         color="primary"
                         onClick={() =>
-                          router.push({
+                          router.replace({
                             pathname: `/companies/jobs/[slug]/edit`,
                             query: { slug: company.slug }
                           })

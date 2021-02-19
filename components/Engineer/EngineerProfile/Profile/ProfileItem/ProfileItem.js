@@ -9,7 +9,7 @@ import CakeIcon from "@material-ui/icons/Cake"
 import PhoneIcon from "@material-ui/icons/Phone"
 import LocationOnIcon from "@material-ui/icons/LocationOn"
 import SlideshowIcon from "@material-ui/icons/Slideshow"
-const ProfileSkillsItem = dynamic(() => import("../ProfileSkillsItem/ProfileSkillsItem"), {
+const ProfileSkillsItem = dynamic(() => import("../../ProfileSkillsItem/ProfileSkillsItem"), {
   ssr: false
 })
 

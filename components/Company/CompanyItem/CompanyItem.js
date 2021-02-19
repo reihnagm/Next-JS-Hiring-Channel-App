@@ -39,7 +39,7 @@ const CompanyItem = ({ companies }) => {
         <Grid container direction="row" justify="start" alignItems="center">
           {companies.map(company => (
             <Card className={classes.root}>
-              <CardActionArea onClick={() => router.push(`/companies/profile?slug=${company.slug}`)}>
+              <CardActionArea onClick={() => router.replace(`/companies/profile?job-title=${company.slug}`, `/companies/profile?job-title=${company.slug}`)}>
                 <CardMedia className={classes.media} image={`${process.env.NEXT_PUBLIC_IMAGES_COMPANY}/${company.logo}`} title={company.logo} />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="h2">
