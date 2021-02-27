@@ -1,4 +1,4 @@
-import React, {useEffect} from "react"
+import React from "react"
 import { withRouter } from "next/router"
 import dynamic from "next/dynamic"
 const Profile = dynamic(() => import("../../../components/Company/CompanyProfile/Profile/Profile"))

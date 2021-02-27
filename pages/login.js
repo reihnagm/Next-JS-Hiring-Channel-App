@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import Head from "next/head"
 import { Button, TextField, Typography } from "@material-ui/core"
 import { useDispatch, useSelector } from "react-redux"
@@ -15,7 +15,7 @@ const Login = () => {
   })
   const { isAuthenticated } = useSelector(state => state.auth)
   const { email, password } = formData
-  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+  const onChange = ev => setFormData({ ...formData, [ev.target.name]: ev.target.value })
   const onSubmit = (ev) => {
     ev.preventDefault()
     try {
@@ -39,11 +39,10 @@ const Login = () => {
       })
     }
   }
-  useEffect(() => {
-    if (isAuthenticated === true) {
-      router.push("/")
-    }
-  }, [isAuthenticated])
+
+  if (isAuthenticated) {
+    router.push("/")
+  }
 
   return (
     <>

@@ -14,12 +14,12 @@ const EditJob = () => {
   const { jobtypes } = useSelector(state => state.jobtype)
   const { skills } = useSelector(state => state.skill)
   useEffect(() => {
-    const fetchData = () => {
+    async function fetchData () {
       if (router.asPath !== router.route) {
-        dispatch(editPostJob(router.query.id))
+        dispatch(await editPostJob(router.query.slug))
       }
-      dispatch(getSkills())
-      dispatch(getJobTypes())
+      dispatch(await getSkills())
+      dispatch(await getJobTypes())
     }
     fetchData()
   }, [router])

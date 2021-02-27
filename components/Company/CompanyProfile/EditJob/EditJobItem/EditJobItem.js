@@ -173,7 +173,7 @@ const EditJobItem = ({ postJob, updatePostJob, allSkills, allJobTypes }) => {
               />
               <NumberFormat onChange={onChange} value={salary} name="salary" margin="normal" variant="outlined" label="Salary" decimalSeparator="," thousandSeparator="." prefix="IDR " allowNegative={false} customInput={TextField} fullWidth />
               <Grid container direction="row" justify="center" alignItems="center">
-                <Button type="button" variant="contained" color="primary" onClick={() => router.back()}>
+                <Button type="button" variant="contained" color="primary" onClick={() => router.replace(`/companies/profile?job-title=${router.query.slug}`)}>
                   Back
                 </Button>
                 <Button type="submit" variant="contained" color="primary">

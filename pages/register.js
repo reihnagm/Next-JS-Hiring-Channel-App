@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import Head from "next/head"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
 import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete"
 import { Button, InputLabel, Grid, Avatar, Badge, FormControl, makeStyles, TextField, MenuItem, Select, Typography } from "@material-ui/core"
@@ -44,16 +44,17 @@ const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) 
 )
 const Register = () => {
   const router = useRouter()
+  const dispatch = useDispatch()
   const { isAuthenticated } = useSelector(state => state.auth)
   const [role, setRole] = useState(1)
   const onChangeRole = element => {
     setRole(element.target.value)
   }
-  useEffect(() => {
-    if (isAuthenticated) {
-      // router.push("/")
-    }
-  }, [isAuthenticated])
+  
+  if (isAuthenticated) {
+    router.push("/")
+  }
+  
   const EngineerInput = () => {
     const [formData, setFormData] = useState({
       fullname: "",
@@ -93,7 +94,7 @@ const Register = () => {
         fd.set("email", email)
         fd.set("password", password)
         fd.set("role", role)
-        registerEngineer(fd, history)
+        dispatch(registerEngineer(fd, router))
       } catch (err) {
         Toast.fire({
           icon: "error",
@@ -102,7 +103,7 @@ const Register = () => {
       }
     }
     return (
-      <form onSubmit={event => onSubmit(event)}>
+      <form onSubmit={onSubmit}>
         <TextField onChange={onChange} value={fullname} name="fullname" margin="normal" variant="outlined" label="Fullname" fullWidth />
         <TextField onChange={onChange} value={nickname} name="nickname" margin="normal" variant="outlined" label="Nickname" fullWidth />
         <TextField onChange={onChange} value={email} name="email" margin="normal" variant="outlined" label="Email" fullWidth />
@@ -162,10 +163,10 @@ const Register = () => {
     const handleFile = _ => {
       fileRef.click()
     }
-    const handleAvatar = async e => {
-      if (e.target.files && e.target.files[0]) {
-        let size = bytesToSize(e.target.files[0].size)
-        let extension = e.target.files[0].name.split(".").pop()
+    const handleAvatar = async ev => {
+      if (ev.target.files && ev.target.files[0]) {
+        let size = bytesToSize(ev.target.files[0].size)
+        let extension = ev.target.files[0].name.split(".").pop()
         let reader = new FileReader()
         try {
           if (size > process.env.NEXT_PUBLIC_SIZE_IMAGE) {
@@ -174,14 +175,14 @@ const Register = () => {
           if (!isImage(extension)) {
             throw new Error("File type allowed: PNG, JPG, JPEG, GIF, SVG, BMP")
           }
-          setLogoFile(e.target.files[0])
+          setLogoFile(ev.target.files[0])
           reader.onload = e => {
             setDefaultLogo(e.target.result)
           }
           reader.onprogress = e => {
             const percent = (e.loaded / e.total) * 100
           }
-          reader.readAsDataURL(e.target.files[0])
+          reader.readAsDataURL(ev.target.files[0])
         } catch (err) {
           Toast.fire({
             icon: "error",

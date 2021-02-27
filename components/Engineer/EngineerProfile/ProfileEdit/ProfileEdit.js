@@ -5,21 +5,18 @@ import { useSelector, useDispatch } from "react-redux"
 import { getCurrentProfileEngineer, updateProfileEngineer } from "../../../../redux/actions/engineer"
 import { getSkills } from "../../../../redux/actions/skill"
 import Spinner from "../../../Spinner/Spinner"
-const ProfileEditItem = dynamic(() => import("./ProfileEditItem/ProfileEditItem"), {
-  ssr: false
-})
+const ProfileEditItem = dynamic(() => import("./ProfileEditItem/ProfileEditItem"))
 
 const ProfileEdit = ( ) => {
   const dispatch = useDispatch()
   const { engineer, loading } = useSelector(state => state.engineer)
   const { skills } = useSelector(state => state.skill)
   useEffect(() => {
-    const fetchData = () => {
-      dispatch(getCurrentProfileEngineer())
-      dispatch(getSkills())
+    async function fetchData() {
+      dispatch(await getCurrentProfileEngineer())
+      dispatch(await getSkills())
     }
     fetchData()
-    console.log(skills)
   }, [])
   return loading ? (
     <Spinner />

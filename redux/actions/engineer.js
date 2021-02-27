@@ -1,7 +1,8 @@
 import axios from "axios"
-import store from "../store.js"
-import { Toast, auth } from "../../utils/helper"
-import { logout } from "./auth"
+import { store } from "../store.js"
+import { Toast } from "../../utils/helper"
+import { loadUser } from "./auth"
+// import { logout } from "./auth"
 import { LOADING, LOADED, LOADING_MORE_DATA, LOADED_MORE_DATA, GET_ENGINEERS, GET_ENGINEERS_ERROR, GET_MORE_DATA, GET_MORE_DATA_ERROR, GET_CURRENT_PROFILE_ENGINEER, GET_CURRENT_PROFILE_ENGINEER_ERROR, GET_PROFILE_ENGINEER_BY_SLUG, GET_PROFILE_ENGINEER_BY_SLUG_ERROR, UPDATE_PROFILE_ENGINEER, UPDATE_PROFILE_ENGINEER_ERROR } from "./types"
 
 export const getEngineers = (searchN, showN, sortN, filterByN) => async dispatch => {
@@ -49,7 +50,7 @@ export const getCurrentProfileEngineer = () => async dispatch => {
     dispatch({
       type: LOADING
     })
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_GET_ENGINEERS}/profile`, { userUid: auth().uid })
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_GET_ENGINEERS}/profile`, { userUid: store.getState().auth.user.uid })
     dispatch({
       type: LOADED
     })
@@ -93,7 +94,6 @@ export const updateProfileEngineer = (payload, router) => async dispatch => {
     dispatch({
       type: LOADED
     })
-    router.push("/engineers")
     Toast.fire({
       icon: "success",
       title: "Profile Updated"
@@ -101,6 +101,10 @@ export const updateProfileEngineer = (payload, router) => async dispatch => {
     dispatch({
       type: UPDATE_PROFILE_ENGINEER
     })
+    dispatch(loadUser())
+    setTimeout(() => {
+      router.push("/engineers")
+    }, 500)
   } catch (err) {
     dispatch({
       type: UPDATE_PROFILE_ENGINEER_ERROR,

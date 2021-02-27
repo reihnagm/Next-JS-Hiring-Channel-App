@@ -3,7 +3,6 @@ import { useRouter } from "next/router"
 import { useSelector, useDispatch } from "react-redux"
 import { AppBar, Toolbar, InputBase, IconButton, Menu, MenuItem, fade, makeStyles } from "@material-ui/core"
 import { logout } from "../../redux/actions/auth"
-import Link from "next/link"
 import Image from "next/image"
 import AvatarComponent from "../Avatar/Avatar"
 import SearchIcon from "@material-ui/icons/Search"
@@ -81,7 +80,6 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
       }
     }
   }))
-  const userRole = user && user.role
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
   const menuId = "primary-search-account-menu"
@@ -94,7 +92,7 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
   }
   const renderMenu = (
     <Menu keepMounted elevation={1} anchorOrigin={{ vertical: "top", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} anchorEl={anchorEl} id={menuId} open={isMenuOpen} onClose={handleMenuClose}>
-      {userRole === 1 && (
+      {user.role === 1 && (
         <>
           <MenuItem className="text-black" onClick={() => router.push("/engineers/profile")}>
             Profile
@@ -104,16 +102,19 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
           </MenuItem>
         </>
       )}
-      {userRole === 2 && (
+      {user.role === 2 && (
         <>
           <MenuItem className="text-black" onClick={() => router.push("/companies/profile")}>
             Profile
           </MenuItem>
           <MenuItem className="text-black" onClick={() => router.push("/companies/add-job")}>
             Add Job
-          </MenuItem>
-          <MenuItem className="text-black" href="/companies/profile/me/edit">
+          </MenuItem>          
+          <MenuItem className="text-black" onClick={() => router.push("/companies/profile/user/edit")}>
             Edit User Profile
+          </MenuItem>
+          <MenuItem className="text-black" onClick={() => router.push("/companies/profile/edit")}>
+            Edit Company Profile
           </MenuItem>
         </>
       )}
@@ -125,7 +126,7 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
       <AppBar elevation={1} color="transparent" position="static">
         <Toolbar>
           <div className={classes.grow}>
-            <Image className="logo" src="/assets/images/logo/logo.png" alt="Hiring Channel Logo" width={80} height={80} />
+            <a href="/"><Image className="logo" src="/assets/images/logo/logo.png" alt="Hiring Channel Logo" width={80} height={80} /></a>
           </div>
           {router.pathname === "/engineers" && (
             <div className={classes.search}>
@@ -175,7 +176,7 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
               Hello, {user.fullname}
             </span>
             <IconButton edge="end" aria-label="account of current user" aria-haspopup="true" color="inherit" aria-controls={menuId} onClick={handleProfileMenuOpen}>
-              <AvatarComponent imageSource={user.avatar} altName={user.avatar} type={userRole === 1 ? "engineers" : "companies"} width="30" height="30" />
+              <AvatarComponent imageSource={user.avatar} altName={user.avatar} type={user.role === 1 ? "engineers" : "companies"} width="30" height="30" />
             </IconButton>
           </div>
         </Toolbar>

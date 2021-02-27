@@ -13,7 +13,7 @@ export const loadUser = () => async dispatch => {
       type: USER_LOADED,
       payload: response.data.data
     })
-  } catch (error) {
+  } catch (err) {
     dispatch({
       type: AUTH_ERROR
     })
@@ -30,12 +30,14 @@ export const login = (email, password, router) => async dispatch => {
       type: LOGIN_SUCCESS,
       payload: response.data
     })
-    router.push("/")
     Toast.fire({
       icon: "success",
       title: "Successful Login"
     })
     dispatch(loadUser())
+    setTimeout(() => {
+      router.push("/")
+    }, 500)
   } catch (err) {
     Toast.fire({
       icon: "error",
@@ -54,12 +56,14 @@ export const registerEngineer = (data, router) => async dispatch => {
       type: REGISTER_SUCCESS,
       payload: response.data
     })
-    router.push("/")
     Toast.fire({
       icon: "success",
       title: "Successful Register"
     })
     dispatch(loadUser())
+    setTimeout(() => {
+      router.push("/")
+    }, 500)
   } catch (err) {
     Toast.fire({
       icon: "error",

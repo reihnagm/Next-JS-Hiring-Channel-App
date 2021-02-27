@@ -16,8 +16,8 @@ const CompanyItem = ({ companies }) => {
   const { loadingMoreDataC, searchC, showC, sortC, filterByC } = useSelector(state => state.company)
   const [offset, setOffset] = useState(0)
   useEffect(() => {
-    const fetchData = () => {
-      dispatch(getCompaniesMoreData(searchC, showC, sortC, filterByC, offset))
+    async function fetchData () {
+      dispatch(await getCompaniesMoreData(searchC, showC, sortC, filterByC, offset))
     }
     if (offset > 0) {
       fetchData()

@@ -4,7 +4,7 @@ const initialState = {
   error: {},
   loading: true
 }
-export default (state = initialState, action) => {
+export default function jobtype(state = initialState, action) {
   const { type, payload } = action
   switch (type) {
     case LOADING:

@@ -10,7 +10,7 @@ const initialState = {
   sortC: "newer",
   searchC: ""
 }
-export default function (state = initialState, action) {
+export default function company(state = initialState, action) {
   const { type, payload } = action
   switch (type) {
     case CHANGE_FILTER_SEARCH_COMPANY:

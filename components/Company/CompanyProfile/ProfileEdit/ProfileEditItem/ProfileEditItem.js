@@ -97,8 +97,8 @@ const ProfileEditItem = ({ company, update }) => {
 
   const { uid, name, email, description, telephone } = formData
 
-  const onChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+  const onChange = ev => {
+    setFormData({ ...formData, [ev.target.name]: ev.target.value })
   }
   const handleChange = address => {
     setLocation(address)

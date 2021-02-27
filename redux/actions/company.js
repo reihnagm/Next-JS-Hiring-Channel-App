@@ -1,6 +1,9 @@
 import axios from "axios"
-import { Toast, auth } from "../../utils/helper"
+import { store } from "../store.js"
+import { loadUser } from "./auth"
+import { Toast } from "../../utils/helper"
 import { LOADING, LOADED, LOADING_MORE_DATA, LOADED_MORE_DATA, EDIT_POST_JOB, EDIT_POST_JOB_ERROR, UPDATE_POST_JOB, UPDATE_POST_JOB_ERROR, STORE_ADD_JOBS, STORE_ADD_JOBS_ERROR, GET_COMPANIES, GET_COMPANIES_ERROR, GET_MORE_DATA, GET_MORE_DATA_ERROR, GET_CURRENT_PROFILE_COMPANY, GET_CURRENT_PROFILE_COMPANY_ERROR, GET_PROFILE_COMPANY_BY_SLUG, GET_PROFILE_COMPANY_BY_SLUG_ERROR, UPDATE_PROFILE_COMPANY, UPDATE_PROFILE_COMPANY_ERROR, DELETE_COMPANY, DELETE_COMPANY_ERROR } from "./types"
+
 export const getCompanies = (searchC, showC, sortC, filterByC) => async dispatch => {
   try {
     dispatch({
@@ -46,7 +49,7 @@ export const getCurrentProfileCompany = () => async dispatch => {
     dispatch({
       type: LOADING
     })
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_GET_COMPANIES}/profile`, { userUid: auth().uid })
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_GET_COMPANIES}/profile`, { userUid: store.getState().auth.user.uid })
     dispatch({
       type: LOADED
     })
@@ -54,10 +57,10 @@ export const getCurrentProfileCompany = () => async dispatch => {
       type: GET_CURRENT_PROFILE_COMPANY,
       payload: response.data.data
     })
-  } catch (error) {
+  } catch (err) {
     dispatch({
       type: GET_CURRENT_PROFILE_COMPANY_ERROR,
-      payload: error
+      payload: err
     })
   }
 }
@@ -74,10 +77,10 @@ export const getProfileCompanyBySlug = slug => async dispatch => {
       type: GET_PROFILE_COMPANY_BY_SLUG,
       payload: response.data.data
     })
-  } catch (error) {
+  } catch (err) {
     dispatch({
       type: GET_PROFILE_COMPANY_BY_SLUG_ERROR,
-      payload: error
+      payload: err
     })
   }
 }
@@ -122,14 +125,16 @@ export const updateProfileCompany = (payload, router) => async dispatch => {
       icon: "success",
       title: "Profile Updated"
     })
-    router.push("/companies")
     dispatch({
       type: LOADED
     })
     dispatch({
-      type: UPDATE_PROFILE_COMPANY,
-      payload: payload
+      type: UPDATE_PROFILE_COMPANY
     })
+    dispatch(loadUser())
+    setTimeout(() => {
+      router.push("/companies")
+    }, 500)
   } catch (err) {
     dispatch({
       type: UPDATE_PROFILE_COMPANY_ERROR,
@@ -137,21 +142,22 @@ export const updateProfileCompany = (payload, router) => async dispatch => {
     })
   }
 }
-export const deleteProfileCompany = id => async dispatch => {
-  const company_id = id
-  try {
-    await axios.delete(`http://localhost:5000/api/v1/companies/${company_id}`)
-    dispatch({
-      type: DELETE_COMPANY,
-      payload: company_id
-    })
-  } catch (error) {
-    dispatch({
-      type: DELETE_COMPANY_ERROR,
-      payload: error
-    })
-  }
-}
+
+// export const deleteProfileCompany = id => async dispatch => {
+//   const company_id = id
+//   try {
+//     await axios.delete(`http://localhost:5000/api/v1/companies/${company_id}`)
+//     dispatch({
+//       type: DELETE_COMPANY,
+//       payload: company_id
+//     })
+//   } catch (error) {
+//     dispatch({
+//       type: DELETE_COMPANY_ERROR,
+//       payload: error
+//     })
+//   }
+// }
 
 export const editPostJob = slug => async dispatch => {
   try {
@@ -187,10 +193,10 @@ export const updatePostJob = (payload, router) => async dispatch => {
     dispatch({
       type: LOADED
     })
-    router.push("/companies")
     dispatch({
       type: UPDATE_POST_JOB
     })
+    router.push("/companies")
   } catch (err) {
     dispatch({
       type: UPDATE_POST_JOB_ERROR,

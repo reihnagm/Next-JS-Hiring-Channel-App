@@ -11,9 +11,9 @@ const ProfileShow = () => {
   const router = useRouter()
   const { company, loading } = useSelector(state => state.company)
   useEffect(() => {
-    const fetchData = () => {
+    async function fetchData () {
       if (router.asPath !== router.route) {
-        dispatch(getProfileCompanyBySlug(router.query['job-title']))
+        dispatch(await getProfileCompanyBySlug(router.query['job-title']))
       }
     }
     fetchData()

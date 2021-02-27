@@ -9,8 +9,8 @@ const ProfileEdit = () => {
   const dispatch = useDispatch()
   const { company, loading } = useSelector(state => state.company)
   useEffect(() => {
-    const fetchData = () => {
-      dispatch(getCurrentProfileCompany())
+    async function fetchData() {
+      dispatch(await getCurrentProfileCompany())
     }
     fetchData()
   }, [])

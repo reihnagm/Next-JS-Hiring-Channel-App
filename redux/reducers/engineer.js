@@ -10,7 +10,7 @@ const initialState = {
   sortN: "newer",
   searchN: ""
 }
-export default (state = initialState, action) => {
+export default function engineer(state = initialState, action) {
   const { type, payload } = action
   const { engineers } = state
   switch (type) {

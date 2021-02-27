@@ -12,10 +12,10 @@ const AddJob = () => {
   const { skills } = useSelector(state => state.skills)
   const { jobtypes } = useSelector(state => state.jobtype)
   useEffect(() => {
-    const fetchData = () => {
-      dispatch(getCurrentProfileCompany())
-      dispatch(getSkills())
-      dispatch(getJobTypes())
+    async function fetchData() {
+      dispatch(await getCurrentProfileCompany())
+      dispatch(await getSkills())
+      dispatch(await getJobTypes())
     }
     fetchData()
   }, [])

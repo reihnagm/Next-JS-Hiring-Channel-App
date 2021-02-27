@@ -1,6 +1,7 @@
 import React from "react"
 import { Container, Grid, Paper, Button, makeStyles, Avatar } from "@material-ui/core"
 import { useRouter } from "next/router"
+import { useSelector } from "react-redux"
 import { auth } from "../../../../../utils/helper"
 import ReactHtmlParser from "react-html-parser"
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance"
@@ -11,6 +12,7 @@ import ProfileSkillsItem from "../../ProfileSkillsItem/ProfileSkillsItem"
 
 const ProfileDetailItem = ({ company }) => {
   const router = useRouter()
+  const { user } = useSelector(state => state.auth)
   const useStyles = makeStyles(theme => ({
     root: {
       flexGrow: 1
@@ -84,7 +86,7 @@ const ProfileDetailItem = ({ company }) => {
                     <Grid item md={9} xs={12}>
                       <h2 className="mb-3">{company.title}</h2>
                     </Grid>
-                    {company.userUid === auth().uid && (
+                    {company.userUid === user.uid && (
                       <Grid item md={3} xs={12}>
                         <Button
                           type="button"

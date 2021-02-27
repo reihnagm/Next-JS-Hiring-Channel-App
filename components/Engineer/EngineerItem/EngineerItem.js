@@ -13,8 +13,8 @@ const EngineerItem = ({ engineers }) => {
   const [offset, setOffset] = useState(0)
 
   useEffect(() => {
-    const fetchData = () => {
-      dispatch(getEngineersMoreData(searchN, showN, sortN, filterByN, offset))
+    async function fetchData () {
+      dispatch(await getEngineersMoreData(searchN, showN, sortN, filterByN, offset))
     }
     if (offset > 0) {
       fetchData()
@@ -34,7 +34,7 @@ const EngineerItem = ({ engineers }) => {
   return (
     <Container fixed>
       <InfiniteScroll dataLength={engineers.length} next={() => setOffset(offset + 10)} hasMore={true} loading={loadingMoreData}>
-        <Grid container direction="row" justify="center" alignItems="center">
+        <Grid container direction="row" justify="start" alignItems="center">
           {engineers.map((engineer, i) => {
             return (
               <Card key={i} className={classes.root}>
@@ -45,7 +45,7 @@ const EngineerItem = ({ engineers }) => {
                       {engineer.fullname}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                      Expected Salary : <span className="card-salary"> {engineer.salary} </span>
+                      Expected Salary : {engineer.salary === null ? "" : <span className="card-salary"> {engineer.salary} </span> } 
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
                       Skills :
