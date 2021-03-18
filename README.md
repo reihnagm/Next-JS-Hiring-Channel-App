@@ -1,5 +1,6 @@
 # Hiring Channel App
 This is an open-source project using Next JS, and Redux
+
 ![8JHGs.jpg](https://i.ibb.co/jr0WFXD/Artboard-1-3x-80.jpg)
 
 ## Prerequiste
