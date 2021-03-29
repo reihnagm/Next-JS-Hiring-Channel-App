@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
 import { CHANGE_FILTER_SEARCH_COMPANY, CHANGE_FILTER_SHOW_COMPANY, CHANGE_FILTER_SORT_COMPANY, CHANGE_FILTER_FILTERBY_COMPANY } from "../../redux/actions/types"
 import dynamic from "next/dynamic"
-const Spinner = dynamic(() => import("../../components/Spinner/Spinner"))
-const Header = dynamic(() => import("../../components/Layouts/Header"))
-const HeaderFilter = dynamic(() => import("../../components/Layouts/HeaderFilter"))
-const CompanyList = dynamic(() => import("../../components/Company/CompanyList/CompanyList")) 
+const Spinner = dynamic(() => import("@components/Spinner/Spinner"))
+const Header = dynamic(() => import("@components/Layouts/Header"))
+const HeaderFilter = dynamic(() => import("@components/Layouts/HeaderFilter"))
+const CompanyList = dynamic(() => import("@components/Company/CompanyList/CompanyList"))
 
 const Index = ({ handleSearch, handleSort, handleFilterBy, handleShow }) => {
   const dispatch = useDispatch()
@@ -15,7 +15,7 @@ const Index = ({ handleSearch, handleSort, handleFilterBy, handleShow }) => {
   const { companies, loading, searchC, showC, sortC, filterByC } = useSelector(state => state.company)
 
   useEffect(() => {
-    async function fetchData () {
+    async function fetchData() {
       dispatch(await getCompanies(searchC, showC, sortC, filterByC))
     }
     fetchData()

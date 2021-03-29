@@ -20,11 +20,11 @@ export const loadUser = () => async dispatch => {
   }
 }
 
-export const login = (email, password, router) => async dispatch => {
+export const login = (email, pass, router) => async dispatch => {
   try {
     const response = await axios.post(`${process.env.NEXT_PUBLIC_LOGIN}`, {
       email,
-      password
+      pass
     })
     dispatch({
       type: LOGIN_SUCCESS,
@@ -35,9 +35,7 @@ export const login = (email, password, router) => async dispatch => {
       title: "Successful Login"
     })
     dispatch(loadUser())
-    setTimeout(() => {
-      router.push("/")
-    }, 500)
+    router.push("/")
   } catch (err) {
     Toast.fire({
       icon: "error",
@@ -49,9 +47,15 @@ export const login = (email, password, router) => async dispatch => {
   }
 }
 
-export const registerEngineer = (data, router) => async dispatch => {
+export const registerEngineer = (fullname, nickname, email, password, role, router) => async dispatch => {
   try {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_REGISTER}`, data)
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_REGISTER}`, {
+      fullname: fullname,
+      nickname: nickname,
+      email: email,
+      password: password,
+      role: role
+    })
     dispatch({
       type: REGISTER_SUCCESS,
       payload: response.data
@@ -61,9 +65,7 @@ export const registerEngineer = (data, router) => async dispatch => {
       title: "Successful Register"
     })
     dispatch(loadUser())
-    setTimeout(() => {
-      router.push("/")
-    }, 500)
+    router.push("/")
   } catch (err) {
     Toast.fire({
       icon: "error",

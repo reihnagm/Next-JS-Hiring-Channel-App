@@ -1,3 +1,7 @@
 module.exports = {
-  compress: true
+  compress: true,
+  devIndicators: {
+    autoPrerender: false,
+  },
+  reactStrictMode: true,
 }

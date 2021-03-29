@@ -88,13 +88,7 @@ const Register = () => {
         if (typeof role === "undefined") {
           throw new Error("Role Required")
         }
-        let fd = new FormData()
-        fd.set("fullname", fullname)
-        fd.set("nickname", nickname)
-        fd.set("email", email)
-        fd.set("password", password)
-        fd.set("role", role)
-        dispatch(registerEngineer(fd, router))
+        dispatch(registerEngineer(fullname, nickname, email, password, role, router))
       } catch (err) {
         Toast.fire({
           icon: "error",
