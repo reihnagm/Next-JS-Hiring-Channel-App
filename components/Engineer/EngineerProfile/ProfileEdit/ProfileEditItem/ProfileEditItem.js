@@ -263,9 +263,9 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
                 renderInput={params => <TextField {...params} margin="normal" label="Skills" placeholder="Skills" variant="outlined" fullWidth />}
               />
               <div>{renderedSkills}</div>
-              {/* <PlacesAutocomplete value={location ?? ""} onChange={handleChange} onSelect={handleSelect}>
+              <PlacesAutocomplete value={location ?? ""} onChange={handleChange} onSelect={handleSelect}>
                 {renderFunction}
-              </PlacesAutocomplete> */}
+              </PlacesAutocomplete>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                   onChange={handleDate}

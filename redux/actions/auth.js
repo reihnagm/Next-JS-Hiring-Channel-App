@@ -90,10 +90,10 @@ export const registerCompany = (data, router) => async dispatch => {
       title: "Successful Register"
     })
     dispatch(loadUser())
-  } catch (err) {
+  } catch (e) {
     Toast.fire({
       icon: "error",
-      title: err.response.data.message
+      title: e.response.data.message
     })
     dispatch({
       type: REGISTER_FAIL

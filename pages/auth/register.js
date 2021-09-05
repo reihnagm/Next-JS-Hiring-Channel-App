@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
 import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete"
 import { Button, InputLabel, Grid, Avatar, Badge, FormControl, makeStyles, TextField, MenuItem, Select, Typography } from "@material-ui/core"
-import { registerEngineer, registerCompany } from "../redux/actions/auth"
-import { isImage, bytesToSize, validateEmail, Toast } from "../utils/helper"
+import { registerEngineer, registerCompany } from "@redux/actions/auth"
+import { isImage, bytesToSize, validateEmail, Toast } from "@utils/helper"
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined"
 import MaskedInput from "react-text-mask"
 import "react-dropdown/style.css"
@@ -54,6 +54,42 @@ const Register = () => {
   if (isAuthenticated) {
     router.push("/")
   }
+
+  const useStyles = makeStyles(theme => ({
+    root: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      "& > *": {
+        margin: theme.spacing(0.5)
+      }
+    },
+    chip: {
+      "& > *": {
+        margin: theme.spacing(0.5)
+      }
+    },
+    small: {
+      width: theme.spacing(3),
+      height: theme.spacing(3)
+    },
+    large: {
+      width: theme.spacing(10),
+      height: theme.spacing(10)
+    },
+    formRegister: {
+      [theme.breakpoints.down("md")]: {
+        margin: "0 30px"
+      }
+    },
+    formTitle: {
+      [theme.breakpoints.down("md")]: {
+        margin: "10px 0",
+        textAlign: "center",
+      }
+    }
+  }))
+  const classes = useStyles()
   
   const EngineerInput = () => {
     const [formData, setFormData] = useState({
@@ -68,36 +104,64 @@ const Register = () => {
       ev.preventDefault()
       try {
         if (fullname.trim() === "") {
-          throw new Error("Fullname Required")
+          Toast.fire({
+            icon: "error",
+            title: "Fullname Required"
+          })
+          return 
         }
         if (nickname.trim() === "") {
-          throw new Error("Nickname Required")
+          Toast.fire({
+            icon: "error",
+            title: "Nickname Required"
+          })
+          return 
         }
         if (email.trim() === "") {
-          throw new Error("Email Required")
+          Toast.fire({
+            icon: "error",
+            title: "E-mail Address Required"
+          })
+          return 
         }
         if (validateEmail(email)) {
-          throw new Error("Invalid Email. e.g : johndoe@gmail.com")
+          Toast.fire({
+            icon: "error",
+            title: "Invalid Email. e.g : johndoe@gmail.com"
+          })
+          return 
         }
         if (password.trim() === "") {
-          throw new Error("Password Required")
+          Toast.fire({
+            icon: "error",
+            title: "Password Required"
+          })
+          return 
         }
         if (password.length < 6) {
-          throw new Error("Password Minimum 6 Character")
+          Toast.fire({
+            icon: "error",
+            title: "Password Minimum 6 Character"
+          })
+          return 
         }
         if (typeof role === "undefined") {
-          throw new Error("Role Required")
+          Toast.fire({
+            icon: "error",
+            title: "Role Required"
+          })
+          return
         }
         dispatch(registerEngineer(fullname, nickname, email, password, role, router))
-      } catch (err) {
+      } catch (e) {
         Toast.fire({
           icon: "error",
-          title: err.message
+          title: e.message
         })
       }
     }
     return (
-      <form onSubmit={onSubmit}>
+      <form className={classes.formRegister} onSubmit={onSubmit}>
         <TextField onChange={onChange} value={fullname} name="fullname" margin="normal" variant="outlined" label="Fullname" fullWidth />
         <TextField onChange={onChange} value={nickname} name="nickname" margin="normal" variant="outlined" label="Nickname" fullWidth />
         <TextField onChange={onChange} value={email} name="email" margin="normal" variant="outlined" label="Email" fullWidth />
@@ -127,30 +191,6 @@ const Register = () => {
       email: "",
       password: ""
     })
-    const useStyles = makeStyles(theme => ({
-      root: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        "& > *": {
-          margin: theme.spacing(0.5)
-        }
-      },
-      chip: {
-        "& > *": {
-          margin: theme.spacing(0.5)
-        }
-      },
-      small: {
-        width: theme.spacing(3),
-        height: theme.spacing(3)
-      },
-      large: {
-        width: theme.spacing(10),
-        height: theme.spacing(10)
-      }
-    }))
-    const classes = useStyles()
     const [logoFile, setLogoFile] = useState("")
     const [logoDefault, setDefaultLogo] = useState("")
     const [companylocation, setCompanyLocation] = useState("")
@@ -177,10 +217,10 @@ const Register = () => {
             const percent = (e.loaded / e.total) * 100
           }
           reader.readAsDataURL(ev.target.files[0])
-        } catch (err) {
+        } catch (e) {
           Toast.fire({
             icon: "error",
-            title: err.message
+            title: e.message
           })
         }
       }
@@ -202,43 +242,95 @@ const Register = () => {
       e.preventDefault()
       try {
         if (fullname.trim() === "") {
-          throw new Error("Fullname Required")
+          Toast.fire({
+            icon: "error",
+            title: "Fullname Required"
+          })
+          return
         }
         if (nickname.trim() === "") {
-          throw new Error("Nickname Required")
+          Toast.fire({
+            icon: "error",
+            title: "Nickname Required"
+          })
+          return
         }
         if (email.trim() === "") {
-          throw new Error("Email Required")
-        }
-        if (logoFile === "") {
-          throw new Error("Logo Required")
+          Toast.fire({
+            icon: "error",
+            title: "E-mail Address Required"
+          })
+          return
         }
         if (validateEmail(email)) {
-          throw new Error("Invalid Email. e.g : johndoe@gmail.com")
+          Toast.fire({
+            icon: "error",
+            titile: "Invalid E-mail Address. E.G : johndoe@gmail.com"
+          })
+          return
+        }
+        if (logoFile === "") {
+          Toast.fire({
+            icon: "error",
+            title: "Logo required"
+          })
+          return 
         }
         if (password.trim() === "") {
-          throw new Error("Password Required")
+          Toast.fire({
+            icon: "error",
+            title: "Password Required"
+          })
+          return
         }
         if (password.length < 6) {
-          throw new Error("Password Minimum 6 Character")
+          Toast.fire({
+            icon: "error",
+            title: "Password Minimum 6 Character" 
+          })
+          return
         }
         if (companyname.trim() === "") {
-          throw new Error("Company Name Required")
+          Toast.fire({
+            icon: "error",
+            title: "Company Name Required"
+          })
+          return
         }
         if (companyemail.trim() === "") {
-          throw new Error("Company Email Required")
+          Toast.fire({
+            icon: "error",
+            title: "Company E-mail Address Required"
+          })
+          return 
         }
         if (companydesc.trim() === "") {
-          throw new Error("Company Description required")
+          Toast.fire({
+            icon: "error",
+            title: "Company Description Required"
+          })
+          return
         }
         if (companytelp.trim() === "") {
-          throw new Error("Company Telephone Required")
+          Toast.fire({
+            icon: "error",
+            title: "Company Telephone Required"
+          })
+          return
         }
         if (companylocation.trim() === "") {
-          throw new Error("Company Location required")
+          Toast.fire({
+            icon: "error",
+            title: "Company Location Required"
+          })
+          return
         }
         if (typeof role === "undefined") {
-          throw new Error("Role Required")
+          Toast.fire({
+            icon:  "error",
+            title: "Role Required"
+          })
+          return
         }
         let fd = new FormData()
         fd.set("fullname", fullname)
@@ -252,16 +344,16 @@ const Register = () => {
         fd.set("companytelp", companytelp)
         fd.set("companydesc", companydesc)
         fd.set("companylocation", companylocation)
-        await registerCompany(fd, history)
-      } catch (err) {
+        registerCompany(fd, history)
+      } catch (e) {
         Toast.fire({
           icon: "error",
-          title: err.message
+          title: e.message
         })
       }
     }
     return (
-      <form onSubmit={event => onSubmit(event)}>
+      <form className={classes.formRegister} onSubmit={event => onSubmit(event)}>
         <TextField onChange={onChange} value={fullname} name="fullname" margin="normal" variant="outlined" label="User Fullname" fullWidth />
         <TextField onChange={onChange} value={nickname} name="nickname" margin="normal" variant="outlined" label="User Nickname" fullWidth />
         <TextField onChange={onChange} value={email} name="email" margin="normal" variant="outlined" label="User Email" fullWidth />
@@ -302,16 +394,12 @@ const Register = () => {
           {renderFunction}
         </PlacesAutocomplete>
         <TextField onChange={onChange} value={password} name="password" margin="normal" variant="outlined" label="Password" type="password" fullWidth />
-        <div className="margin-normal">
-          <Button style={{ margin: 0 }} type="submit" variant="contained" color="primary" fullWidth>
-            Register
-          </Button>
-        </div>
-        <div className="margin-normal">
-          <Button style={{ margin: 0 }} type="button" variant="contained" color="primary" onClick={() => router.replace("/")} fullWidth>
-            Back
-          </Button>
-        </div>
+        <Button type="submit" variant="contained" color="primary" fullWidth>
+          Register
+        </Button>
+        <Button type="button" variant="contained" color="primary" onClick={() => router.replace("/")} fullWidth>
+          Back
+        </Button>
       </form>
     )
   }
@@ -324,28 +412,32 @@ const Register = () => {
       <div className="columns justify-center min-h-screen">
         <div className="column marginless" id="cover-background-register">
           <div id="cover-register"></div>
-          <h2 className="title mx-3 text-white">Hire expert freelancers for any job, online</h2>
-          <h3 className="sub-title mx-3 text-white">Millions of small businesses use Frelancer to turn their ideas into reality.</h3>
+          <div id="content-register"> 
+            <h2 className="title mx-3 text-white">Hire expert freelancers for any job, online</h2>
+            <h3 className="sub-title mx-3 text-white">Millions of small businesses use Frelancer to turn their ideas into reality.</h3>
+          </div>
         </div>
         <div className="column">
-          <Typography variant="h5" component="h5" gutterBottom>
+          <Typography className={classes.formTitle} variant="h5" component="h5" gutterBottom>
             Register
           </Typography>
-          <FormControl margin="normal" variant="outlined" fullWidth>
-            <InputLabel htmlFor="outlined-role">Select your Role</InputLabel>
-            <Select
-              inputProps={{
-                name: "role",
-                id: "outlined-role"
-              }}
-              value={role}
-              label="Select your Role"
-              onChange={e => onChangeRole(e)}
-            >
-              <MenuItem value={1}>Engineer</MenuItem>
-              <MenuItem value={2}>Company</MenuItem>
-            </Select>
-          </FormControl>
+          <div className={classes.formRegister}>
+            <FormControl margin="normal" variant="outlined" fullWidth>
+              <InputLabel htmlFor="outlined-role">Select your Role</InputLabel>
+              <Select
+                inputProps={{
+                  name: "role",
+                  id: "outlined-role"
+                }}
+                value={role}
+                label="Select your Role"
+                onChange={e => onChangeRole(e)}
+              >
+                <MenuItem value={1}>Engineer</MenuItem>
+                <MenuItem value={2}>Company</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
           {role == 1 && <EngineerInput />}
           {role == 2 && <CompanyInput />}
         </div>

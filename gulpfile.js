@@ -12,4 +12,5 @@ gulp.task("watch", function () {
   gulp.watch("public/assets-dev/css/**/*", gulp.series("styles"))
 })
 // BUG: if task watch no change everything, return the function task styles
-gulp.parallel("styles", "watch")
+// gulp.parallel("styles", "watch")
+gulp.task('default', gulp.series('styles', 'watch'));

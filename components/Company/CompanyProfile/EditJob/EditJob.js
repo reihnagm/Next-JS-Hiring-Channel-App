@@ -1,11 +1,11 @@
 import React, { useEffect } from "react"
 import { useRouter } from "next/router"
 import { useDispatch, useSelector } from "react-redux"
-import { editPostJob, updatePostJob } from "../../../../redux/actions/company"
-import { getSkills } from "../../../../redux/actions/skill"
-import { getJobTypes } from "../../../../redux/actions/jobtype"
-import Spinner from "../../../Spinner/Spinner"
-import EditJobItem from "./EditJobItem/EditJobItem"
+import { editPostJob, updatePostJob } from "@redux/actions/company"
+import { getSkills } from "@redux/actions/skill"
+import { getJobTypes } from "@redux/actions/jobtype"
+import Spinner from "@components/Spinner/Spinner"
+import EditJobItem from "@components/Company/CompanyProfile/EditJob/EditJobItem/EditJobItem"
 
 const EditJob = () => {
   const router = useRouter()
@@ -14,14 +14,11 @@ const EditJob = () => {
   const { jobtypes } = useSelector(state => state.jobtype)
   const { skills } = useSelector(state => state.skill)
   useEffect(() => {
-    async function fetchData () {
-      if (router.asPath !== router.route) {
-        dispatch(await editPostJob(router.query.slug))
-      }
-      dispatch(await getSkills())
-      dispatch(await getJobTypes())
+    if (router.asPath !== router.route) {
+      dispatch(editPostJob(router.query.slug))
     }
-    fetchData()
+    dispatch(getSkills())
+    dispatch(getJobTypes())
   }, [router])
   return loading ? (
     <Spinner />

@@ -1,11 +1,17 @@
 import React, { useState } from "react"
 import { useRouter } from "next/router"
 import { useSelector, useDispatch } from "react-redux"
-import { AppBar, Toolbar, InputBase, IconButton, Menu, MenuItem, fade, makeStyles } from "@material-ui/core"
-import { logout } from "../../redux/actions/auth"
+import { AppBar, SwipeableDrawer, Toolbar, InputBase, IconButton, Menu, MenuItem, alpha, makeStyles } from "@material-ui/core"
+import { logout } from "@redux/actions/auth"
 import Image from "next/image"
-import AvatarComponent from "../Avatar/Avatar"
+import AvatarComponent from "@components/Avatar/Avatar"
+import MenuIcon from '@material-ui/icons/Menu'
 import SearchIcon from "@material-ui/icons/Search"
+
+import List from '@material-ui/core/List'
+import Divider from '@material-ui/core/Divider'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 
 const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
   const dispatch = useDispatch()
@@ -19,33 +25,32 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
     grow: {
       flexGrow: 1
     },
-    menuButton: {
-      marginRight: theme.spacing(2)
+    list: {
+      width: 250,
     },
-    large: {
-      width: theme.spacing(4),
-      height: theme.spacing(4)
+    menu: {
+      display: "block",
+      flexGrow: 1,
+      [theme.breakpoints.down("sm")]: {
+        display: "none"
+      }
     },
-    title: {
+    hamburgerMenu: {
       display: "none",
-      [theme.breakpoints.up("sm")]: {
+      [theme.breakpoints.down("sm")]: {
         display: "block"
       }
     },
     search: {
       position: "relative",
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.15),
+      backgroundColor: alpha(theme.palette.common.white, 0.15),
       "&:hover": {
-        backgroundColor: fade(theme.palette.common.white, 0.25)
+        backgroundColor: alpha(theme.palette.common.white, 0.25)
       },
       marginRight: theme.spacing(2),
-      marginLeft: 0,
-      width: "100%",
-      [theme.breakpoints.up("sm")]: {
-        marginLeft: theme.spacing(3),
-        width: "auto"
-      }
+      marginLeft: theme.spacing(2),
+      width: "auto",
     },
     searchIcon: {
       width: theme.spacing(7),
@@ -81,6 +86,9 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
     }
   }))
   const classes = useStyles()
+  const [drawer, setDrawer] = useState({
+    left: false
+  });
   const [anchorEl, setAnchorEl] = useState(null)
   const menuId = "primary-search-account-menu"
   const isMenuOpen = Boolean(anchorEl)
@@ -90,8 +98,21 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
   const handleMenuClose = () => {
     setAnchorEl(null)
   }
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawer({ ...drawer, [anchor]: open });
+  };
   const renderMenu = (
-    <Menu keepMounted elevation={1} anchorOrigin={{ vertical: "top", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} anchorEl={anchorEl} id={menuId} open={isMenuOpen} onClose={handleMenuClose}>
+    <Menu 
+      keepMounted 
+      elevation={1} anchorOrigin={{ vertical: "top", horizontal: "right" }} 
+      transformOrigin={{ vertical: "top", horizontal: "right" }} 
+      anchorEl={anchorEl} 
+      id={menuId} 
+      open={isMenuOpen} 
+      onClose={handleMenuClose}>
       {user.role === 1 && (
         <>
           <MenuItem className="text-black" onClick={() => router.push("/engineers/profile")}>
@@ -123,7 +144,7 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
   )
   const authLinks = (
     <div className={classes.grow}>
-      <AppBar elevation={1} color="transparent" position="static">
+      <AppBar color="transparent" position="static">
         <Toolbar>
           <div className={classes.grow}>
             <a href="/"><Image className="logo" src="/assets/images/logo/logo.png" alt="Hiring Channel Logo" width={80} height={80} /></a>
@@ -160,7 +181,7 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
               />
             </div>
           )}
-          <div className={classes.grow}>
+          <div className={classes.menu}>
             <span className="text-black mx-3 cursor-pointer" onClick={() => router.push("/")}>
               Home
             </span>
@@ -185,7 +206,7 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
     </div>
   )
   const guestLinks = (
-    <div className={classes.grow}>
+    <div>
       <AppBar elevation={1} color="transparent" position="static">
         <Toolbar>
           <div className={classes.grow}>
@@ -223,7 +244,61 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
               />
             </div>
           )}
-          <div className={classes.grow}>
+          <IconButton 
+            className={classes.hamburgerMenu} 
+            onClick={toggleDrawer('left', true)} 
+            edge="start" 
+            color="inherit" 
+            aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+          <SwipeableDrawer
+            anchor={'left'} 
+            open={drawer['left']} 
+            onClose={toggleDrawer('left', false)}
+          >
+            <div
+              className={classes.list}
+              role="presentation"
+              onClick={toggleDrawer('left', false)}
+              onKeyDown={toggleDrawer('left', false)}
+            >
+              <List>
+                {[  
+                  {
+                    title: "Home",
+                    url: "/"
+                  }, 
+                  {
+                    title: "Engineers",
+                    url: "/engineers"
+                  },
+                  {
+                    title: "Companies",
+                    url: "/companies"
+                  }, 
+                  {
+                    title: "Login",
+                    url: "/auth/login"
+                  },
+                  {
+                    title: "Register",
+                    url: "auth/register"
+                }].map((item, i) => (
+                  <ListItem button key={i}>
+                    <ListItemText 
+                      onClick={() => {
+                        router.push(item.url)
+                      }} 
+                      primary={item.title} 
+                    />
+                  </ListItem>
+                ))}
+              </List>
+              <Divider />
+            </div>
+          </SwipeableDrawer>
+          <div className={classes.menu}>
             <span
               className="text-black mx-3 cursor-pointer"
               onClick={() => {
@@ -251,7 +326,7 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
             <span
               className="text-black mx-3 cursor-pointer"
               onClick={() => {
-                router.push("/login")
+                router.push("/auth/login")
               }}
             >
               Login
@@ -259,7 +334,7 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
             <span
               className="text-black mx-3 cursor-pointer"
               onClick={() => {
-                router.push("/register")
+                router.push("auth/register")
               }}
             >
               Register

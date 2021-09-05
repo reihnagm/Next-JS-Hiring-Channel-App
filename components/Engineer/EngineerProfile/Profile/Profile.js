@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getCurrentProfileEngineer } from "../../../../redux/actions/engineer"
+import { getCurrentProfileEngineer } from "@redux/actions/engineer"
 import dynamic from "next/dynamic"
-import Spinner from "../../../Spinner/Spinner"
+import Spinner from "@components/Spinner/Spinner"
 const ProfileItem = dynamic(() => import("./ProfileItem/ProfileItem"))
 
 const Profile = () => {
@@ -10,10 +10,7 @@ const Profile = () => {
   const dispatch = useDispatch()
   useEffect(() => {
   	let current = true
-    async function fetchData () {
-      dispatch(await getCurrentProfileEngineer())
-    }
-    fetchData()
+    dispatch(getCurrentProfileEngineer())
     return () => {
       current = false
     }

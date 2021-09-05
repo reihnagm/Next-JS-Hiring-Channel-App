@@ -9,13 +9,14 @@ export default class MyDocument extends Document {
         <Head>
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           {/* Favicon */}
           <link rel="shortcut icon" href="/assets/images/favicon/favicon.ico" />
           {/* main CSS */}
           <link rel="stylesheet" href="/assets/css/main.css" />
           {/* Google Font Nunito */}
           <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@600;900&display=swap" />
-          {/* Google Maps API */}
+          {/* Google Maps API */} 
           <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFRpXPf8BXaR22nDvvx2ghBfbUbGGX8N8&libraries=places"></script>
         </Head>
         <body>

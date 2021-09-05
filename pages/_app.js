@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { PersistGate } from "redux-persist/integration/react"
 import { useDispatch } from "react-redux"
-import { loadUser } from "../redux/actions/auth"
+import { loadUser } from "@redux/actions/auth"
 import { ThemeProvider } from "@material-ui/core/styles"
 import { Provider } from "react-redux"
 import { createWrapper } from "next-redux-wrapper"
@@ -10,7 +10,7 @@ import Router from "next/router"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import theme from "../configs/theme"
 import setAuthToken from "../utils/token"
-import { store, persistor } from "../redux/store"
+import { store, persistor } from "@redux/store"
 
 if (typeof window !== "undefined" && window.localStorage.token) {
   setAuthToken(typeof window !== "undefined" && window.localStorage.token)
@@ -69,9 +69,6 @@ const MyApp = ({ Component, pageProps }) => {
   }, [])
   return (
     <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Head>
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <ThemeProvider theme={theme}>

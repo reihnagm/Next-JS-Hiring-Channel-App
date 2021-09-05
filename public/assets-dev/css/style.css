@@ -27,8 +27,8 @@
   background-image: url("../../assets/cover/cover_landing.jpg");
   background-size: contain;
   background-repeat: no-repeat;
-  position: relative;
-  height: 400px;
+  background-position: center center;
+  height: 500px;
 }
 #top-screen {
   background-color: rgb(225, 168, 230);

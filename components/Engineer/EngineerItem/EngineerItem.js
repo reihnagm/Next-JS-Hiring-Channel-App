@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
 import { Container, Grid, makeStyles, Card, CardActionArea, CardContent, CardMedia, Typography } from "@material-ui/core"
-import { getEngineersMoreData } from "../../../redux/actions/engineer"
+import { getEngineersMoreData } from "@redux/actions/engineer"
 import InfiniteScroll from "react-infinite-scroll-component"
-import ProfileSkillsItem from "../EngineerProfile/ProfileSkillsItem/ProfileSkillsItem"
+import ProfileSkillsItem from "@components/Engineer/EngineerProfile/ProfileSkillsItem/ProfileSkillsItem"
 
 const EngineerItem = ({ engineers }) => {
   const router = useRouter()
@@ -13,8 +13,8 @@ const EngineerItem = ({ engineers }) => {
   const [offset, setOffset] = useState(0)
 
   useEffect(() => {
-    async function fetchData () {
-      dispatch(await getEngineersMoreData(searchN, showN, sortN, filterByN, offset))
+    function fetchData() {
+      dispatch(getEngineersMoreData(searchN, showN, sortN, filterByN, offset))
     }
     if (offset > 0) {
       fetchData()

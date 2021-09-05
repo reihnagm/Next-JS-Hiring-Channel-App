@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { getCompanies } from "../../redux/actions/company"
+import { getCompanies } from "@redux/actions/company"
 import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
 import { CHANGE_FILTER_SEARCH_COMPANY, CHANGE_FILTER_SHOW_COMPANY, CHANGE_FILTER_SORT_COMPANY, CHANGE_FILTER_FILTERBY_COMPANY } from "../../redux/actions/types"

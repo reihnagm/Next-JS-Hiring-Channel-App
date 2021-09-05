@@ -1,10 +1,10 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getCurrentProfileCompany, storeAddJob } from "../../../../redux/actions/company"
-import { getSkills } from "../../../../redux/actions/skill"
-import { getJobTypes } from "../../../../redux/actions/jobtype"
-import Spinner from "../../../Spinner/Spinner"
-import AddJobItem from "./AddJobItem/AddJobItem"
+import { getCurrentProfileCompany, storeAddJob } from "@redux/actions/company"
+import { getSkills } from "@redux/actions/skill"
+import { getJobTypes } from "@redux/actions/jobtype"
+import Spinner from "@components/Spinner/Spinner"
+import AddJobItem from "@components/Company/CompanyProfile/AddJob/AddJobItem/AddJobItem"
 
 const AddJob = () => {
   const dispatch = useDispatch()

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
-import { getEngineers } from "../../redux/actions/engineer"
+import { getEngineers } from "@redux/actions/engineer"
 import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
-import { CHANGE_FILTER_SEARCH, CHANGE_FILTER_SHOW, CHANGE_FILTER_SORT, CHANGE_FILTER_FILTERBY } from "../../redux/actions/types"
+import { CHANGE_FILTER_SEARCH, CHANGE_FILTER_SHOW, CHANGE_FILTER_SORT, CHANGE_FILTER_FILTERBY } from "@redux/actions/types"
 import dynamic from "next/dynamic"
 const Spinner = dynamic(() => import("@components/Spinner/Spinner"))
 const Header = dynamic(() => import("@components/Layouts/Header"))

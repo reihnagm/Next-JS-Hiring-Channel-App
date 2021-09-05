@@ -22,7 +22,7 @@ app
       app.render(req, res, "/engineers")
     })
     server.get("/companies", (req, res) => {
-      app.render(req, res, "/engineers")
+      app.render(req, res, "/companies")
     })
     server.get("*", (req, res) => {
       return handle(req, res)
@@ -31,8 +31,7 @@ app
       if (err) throw err
       console.log("> Ready on http://localhost:3000")
     })
-  })
-  .catch(ex => {
+  }).catch(ex => {
     console.error(ex.stack)
     process.exit(1)
   })

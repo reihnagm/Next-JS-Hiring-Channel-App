@@ -3,8 +3,8 @@ import "date-fns"
 import dynamic from "next/dynamic"
 import { useSelector, useDispatch } from "react-redux"
 import { getCurrentProfileEngineer, updateProfileEngineer } from "../../../../redux/actions/engineer"
-import { getSkills } from "../../../../redux/actions/skill"
-import Spinner from "../../../Spinner/Spinner"
+import { getSkills } from "@redux/actions/skill"
+import Spinner from "@components/Spinner/Spinner"
 const ProfileEditItem = dynamic(() => import("./ProfileEditItem/ProfileEditItem"))
 
 const ProfileEdit = ( ) => {
@@ -12,12 +12,13 @@ const ProfileEdit = ( ) => {
   const { engineer, loading } = useSelector(state => state.engineer)
   const { skills } = useSelector(state => state.skill)
   useEffect(() => {
-    async function fetchData() {
-      dispatch(await getCurrentProfileEngineer())
-      dispatch(await getSkills())
+    let current = true
+    dispatch(getCurrentProfileEngineer())
+    dispatch(getSkills())
+    return () => {
+      current = false
     }
-    fetchData()
-  }, [])
+  }, [])  
   return loading ? (
     <Spinner />
   ) : (

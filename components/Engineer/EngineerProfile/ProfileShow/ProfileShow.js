@@ -9,10 +9,7 @@ const ProfileShow = ({ slug }) => {
   const dispatch = useDispatch()
   const { engineer, loading } = useSelector(state => state.engineer)
   useEffect(() => {
-    async function fetchData () {
-      dispatch(await getProfileEngineerBySlug(slug))
-    }
-    fetchData()
+    dispatch(getProfileEngineerBySlug(slug))
   }, [slug])
   return loading ? <Spinner /> : <ProfileShowItem engineer={engineer} />
 }

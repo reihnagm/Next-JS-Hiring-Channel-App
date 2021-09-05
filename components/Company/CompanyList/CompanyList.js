@@ -1,5 +1,5 @@
 import React from "react"
-import CompanyItem from "../CompanyItem/CompanyItem"
-import Empty from "../../Layouts/PageEmpty"
+import CompanyItem from "@components/Company/CompanyList/CompanyList"
+import Empty from "@components/Layouts/PageEmpty"
 const CompanyList = ({ companies }) => (companies.length === 0 ? <Empty /> : <CompanyItem companies={companies} />)
 export default CompanyList

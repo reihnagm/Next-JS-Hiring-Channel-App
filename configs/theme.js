@@ -1,7 +1,7 @@
-import { createMuiTheme } from "@material-ui/core"
+import { createTheme } from "@material-ui/core"
 import purple from "@material-ui/core/colors/purple"
 import grey from "@material-ui/core/colors/grey"
-const theme = createMuiTheme({
+const theme = createTheme({
   overrides: {
     MuiButton: {
       root: {

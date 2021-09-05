@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react"
 import { Container, Grid, Card, CardActionArea, CardContent, CardMedia, Typography, Button, makeStyles } from "@material-ui/core"
 import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
-import { getCompaniesMoreData } from "../../../redux/actions/company"
+import { getCompaniesMoreData } from "@redux/actions/company"
 import dynamic from "next/dynamic"
 import ReactHtmlParser from "react-html-parser"
 import InfiniteScroll from "react-infinite-scroll-component"
-const ProfileSkillsItem = dynamic(() => import("../CompanyProfile/ProfileSkillsItem/ProfileSkillsItem"), {
+const ProfileSkillsItem = dynamic(() => import("@components/Company/CompanyProfile/ProfileSkillsItem/ProfileSkillsItem"), {
   ssr: false
 })
 

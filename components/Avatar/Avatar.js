@@ -4,10 +4,10 @@ const AvatarComponent = ({ imageSource, type, altName, width, height, spaceBotto
   const [image, setImage] = useState(null)
   useEffect(() => {
     if (type === "engineers") {
-      setImage(`http://localhost:5000/images/engineer/${imageSource}`)
+      setImage(`${process.env.NEXT_PUBLIC_IMAGES_ENGINEER}/${imageSource}`)
     }
     if (type === "companies") {
-      setImage(`http://localhost:5000/images/company/${imageSource}`)
+      setImage(`${process.env.NEXT_PUBLIC_IMAGES_COMPANY}/${imageSource}`)
     }
   }, [imageSource, type, setImage])
   return (
