@@ -3,9 +3,11 @@ import Head from "next/head"
 import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
 import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete"
-import { Button, InputLabel, Grid, Avatar, Badge, FormControl, makeStyles, TextField, MenuItem, Select, Typography } from "@material-ui/core"
+import { Button, IconButton, InputAdornment, InputLabel, Grid, Avatar, Badge, FormControl, makeStyles, TextField, MenuItem, Select, Typography } from "@material-ui/core"
 import { registerEngineer, registerCompany } from "@redux/actions/auth"
 import { isImage, bytesToSize, validateEmail, Toast } from "@utils/helper"
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined"
 import MaskedInput from "react-text-mask"
 import "react-dropdown/style.css"
@@ -99,6 +101,13 @@ const Register = () => {
       password: ""
     })
     const { fullname, nickname, email, password } = formData
+    const [showPassword, setShowPassword] = useState(false)
+    const handleClickShowPassword = () => {
+      setShowPassword(!showPassword)
+    };
+    const handleMouseDownPassword = (event) => {
+      event.preventDefault();
+    };
     const onChange = ev => setFormData({ ...formData, [ev.target.name]: ev.target.value })
     const onSubmit = async ev => {
       ev.preventDefault()
@@ -165,17 +174,25 @@ const Register = () => {
         <TextField onChange={onChange} value={fullname} name="fullname" margin="normal" variant="outlined" label="Fullname" fullWidth />
         <TextField onChange={onChange} value={nickname} name="nickname" margin="normal" variant="outlined" label="Nickname" fullWidth />
         <TextField onChange={onChange} value={email} name="email" margin="normal" variant="outlined" label="Email" fullWidth />
-        <TextField onChange={onChange} value={password} name="password" margin="normal" variant="outlined" label="Password" type="password" fullWidth />
-        <div className="margin-normal">
-          <Button style={{ margin: 0 }} type="submit" variant="contained" color="primary" fullWidth>
-            Register
-          </Button>
-        </div>
-        <div className="margin-normal">
-          <Button style={{ margin: 0 }} type="button" variant="contained" color="primary" onClick={() => router.replace("/")} fullWidth>
-            Back
-          </Button>
-        </div>
+        <TextField  onChange={onChange} value={password} name="password" margin="normal" type={showPassword ? "text": "password"} variant="outlined" label="Password" fullWidth 
+          InputProps={{
+            endAdornment: <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+              >
+              {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          }}
+        />
+        <Button type="submit" variant="contained" color="primary">
+          Register
+        </Button>
+        <Button type="button" variant="contained" color="primary" onClick={() => router.replace("/")}>
+          Back
+        </Button>
       </form>
     )
   }
@@ -394,10 +411,10 @@ const Register = () => {
           {renderFunction}
         </PlacesAutocomplete>
         <TextField onChange={onChange} value={password} name="password" margin="normal" variant="outlined" label="Password" type="password" fullWidth />
-        <Button type="submit" variant="contained" color="primary" fullWidth>
+        <Button type="submit" variant="contained" color="primary">
           Register
         </Button>
-        <Button type="button" variant="contained" color="primary" onClick={() => router.replace("/")} fullWidth>
+        <Button type="button" variant="contained" color="primary" onClick={() => router.replace("/")}>
           Back
         </Button>
       </form>
@@ -409,7 +426,7 @@ const Register = () => {
         <meta name="description" content="Hiring Channel Register Page" />
         <title>Register</title>
       </Head>
-      <div className="columns justify-center min-h-screen">
+      <div id="register" className="columns justify-center min-h-screen">
         <div className="column marginless" id="cover-background-register">
           <div id="cover-register"></div>
           <div id="content-register"> 

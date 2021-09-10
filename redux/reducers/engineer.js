@@ -1,6 +1,7 @@
 import { LOADING, LOADED, CHANGE_FILTER_SEARCH, CHANGE_FILTER_SHOW, CHANGE_FILTER_SORT, CHANGE_FILTER_FILTERBY, LOADING_MORE_DATA, LOADED_MORE_DATA, GET_ENGINEERS, GET_ENGINEERS_ERROR, GET_MORE_DATA, GET_MORE_DATA_ERROR, GET_CURRENT_PROFILE_ENGINEER, GET_CURRENT_PROFILE_ENGINEER_ERROR, GET_PROFILE_ENGINEER_BY_SLUG, GET_PROFILE_ENGINEER_BY_SLUG_ERROR, UPDATE_PROFILE_ENGINEER, UPDATE_PROFILE_ENGINEER_ERROR, DELETE_ENGINEER, DELETE_ENGINEER_ERROR } from "../actions/types"
 const initialState = {
   engineers: [],
+  engineersCount: 0,
   engineer: {},
   error: {},
   loading: false,
@@ -57,7 +58,8 @@ export default function engineer(state = initialState, action) {
     case GET_ENGINEERS:
       return {
         ...state,
-        engineers: payload
+        engineers: payload,
+        engineersCount: payload.length
       }
     case GET_ENGINEERS_ERROR:
       return {
@@ -67,7 +69,8 @@ export default function engineer(state = initialState, action) {
     case GET_MORE_DATA:
       return {
         ...state,
-        engineers: [...engineers, ...payload]
+        engineers: [...engineers, ...payload],
+        engineersCount: payload.length
       }
     case GET_MORE_DATA_ERROR:
       return {

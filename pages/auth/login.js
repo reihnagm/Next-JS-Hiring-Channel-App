@@ -1,10 +1,12 @@
 import React, { useState } from "react"
 import Head from "next/head"
-import { Button, TextField, Typography, makeStyles } from "@material-ui/core"
+import { Button, InputAdornment, IconButton, TextField, Typography, makeStyles } from "@material-ui/core"
 import { useDispatch, useSelector } from "react-redux"
 import { login } from "@redux/actions/auth"
 import { validateEmail, Toast } from "@utils/helper"
 import { useRouter } from "next/router"
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -29,6 +31,13 @@ const Login = () => {
   const classes = useStyles()
   const { isAuthenticated } = useSelector(state => state.auth)
   const { email, password } = formData
+  const [showPassword, setShowPassword] = useState(false)
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword)
+  };
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   const onChange = ev => setFormData({ ...formData, [ev.target.name]: ev.target.value })
   const onSubmit = (ev) => {
     ev.preventDefault()
@@ -80,7 +89,7 @@ const Login = () => {
         <meta name="description" content="Hiring Channel Login Page" />
         <title>Login</title>
       </Head>
-      <div className="columns justify-center min-h-screen">
+      <div id="login" className="columns justify-center min-h-screen">
         <div className="column marginless" id="cover-background-login">
           <div id="cover-login"></div>
           <div id="content-login">
@@ -94,7 +103,19 @@ const Login = () => {
           </Typography>
           <form className={classes.formLogin} onSubmit={onSubmit}>
             <TextField onChange={onChange} value={email} name="email" margin="normal" variant="outlined" label="Email" fullWidth />
-            <TextField onChange={onChange} value={password} name="password" type="password" margin="normal" variant="outlined" label="Password" fullWidth />
+            <TextField onChange={onChange} value={password} name="password" margin="normal" type={showPassword ? "text": "password"} variant="outlined" label="Password" fullWidth 
+              InputProps={{
+                endAdornment: <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                  >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }}
+            />
             <Button type="submit" variant="contained" color="primary">
               Login
             </Button>

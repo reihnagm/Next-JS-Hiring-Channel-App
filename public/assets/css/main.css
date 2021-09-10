@@ -29,7 +29,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
 .navbar{display:flex;align-items:center;justify-content:space-around;height:80px;line-height:80px}.navbar img{max-height:50px}nav a{text-decoration:none;background-color:#ffffff;color:#ffffff;display:inline-block;padding:4px}nav a:hover{color:#000000}
 
-@media screen and (max-width: 968px){.columns{display:block}.column{margin:0;padding:0}.is-half{width:100% !important}.is-one-fifth{width:100% !important}#header-filter{margin:0 30px}#cover-landing{margin-top:50px !important;height:300px !important}#cover-login,#cover-register{height:300px !important}#content-landing{width:323px;margin:30px auto !important}#content-login,#content-register{width:500px;margin:30px auto !important;padding:30px 30px}}
+@media screen and (max-width: 968px){.columns{display:block}.column{margin:0;padding:0}.is-half{width:100% !important}.is-one-fifth{width:100% !important}#login,#register{margin:20px 0}#header-filter{margin:0 30px}#cover-landing{margin-top:50px !important;height:300px !important}#cover-login,#cover-register{height:300px !important}#content-landing{width:323px;margin:30px auto !important}#content-login,#content-register{width:500px;margin:30px auto !important;padding:30px 30px}}
 
 .is-size-5{font-size:5px}.is-size-10{font-size:10px}.is-size-15{font-size:15px}.is-size-25{font-size:25px}.is-size-30{font-size:30px}.text-title{font-size:20px}
 
