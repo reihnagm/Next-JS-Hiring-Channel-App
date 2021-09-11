@@ -1,6 +1,8 @@
 import React from "react"
 import { Container, Grid, Paper, Button, makeStyles } from "@material-ui/core"
 import { useRouter } from "next/router"
+import { Editor } from "react-draft-wysiwyg"
+import { EditorState, convertFromRaw } from 'draft-js'
 import dynamic from "next/dynamic"
 import * as moment from "moment"
 import PersonIcon from "@material-ui/icons/Person"
@@ -94,7 +96,14 @@ const ProfileShowItem = ({ engineer }) => {
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <p> {engineer.description} </p>
+                { engineer.description != "" ? 
+                  <Editor
+                    toolbarHidden={true}
+                    readOnly={true}
+                    editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(engineer.description)))}
+                  />
+                  : ""
+                }
               </Paper>
             </Grid>
             <Grid item md={4} xs={12}>
@@ -107,7 +116,7 @@ const ProfileShowItem = ({ engineer }) => {
               <div className="mt-6">
                 <Paper className={classes.paper}>
                   <p className="mb-2">Expected Salary</p>
-                  <p>{engineer.salary}</p>
+                  {engineer.salary === null ||engineer.salary == "" ? "" : <span className="card-salary"> {engineer.salary} </span> } 
                 </Paper>
               </div>
             </Grid>

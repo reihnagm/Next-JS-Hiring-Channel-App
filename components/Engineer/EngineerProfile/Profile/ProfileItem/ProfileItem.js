@@ -3,12 +3,15 @@ import * as moment from "moment"
 import dynamic from "next/dynamic"
 import { Container, Grid, Paper, Button, Avatar, makeStyles } from "@material-ui/core"
 import { useRouter } from "next/router"
+import { Editor } from "react-draft-wysiwyg"
+import { EditorState, convertFromRaw } from 'draft-js'
 import PersonIcon from "@material-ui/icons/Person"
 import EmailIcon from "@material-ui/icons/Email"
 import CakeIcon from "@material-ui/icons/Cake"
 import PhoneIcon from "@material-ui/icons/Phone"
 import LocationOnIcon from "@material-ui/icons/LocationOn"
 import SlideshowIcon from "@material-ui/icons/Slideshow"
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 const ProfileSkillsItem = dynamic(() => import("../../ProfileSkillsItem/ProfileSkillsItem"), {
   ssr: false
 })
@@ -30,15 +33,15 @@ const ProfileItem = ({ engineer }) => {
     }
   }))
   const classes = useStyles()
-  const avatar = engineer.avatar === null ? "" : engineer.avatar 
-  const fullname = engineer.fullname === null ? "" : engineer.fullname
-  const email = engineer.email === null ? "" : engineer.email
+  const avatar = engineer.avatar === null || engineer.avatar === "" ? "" : engineer.avatar 
+  const fullname = engineer.fullname === null || engineer.fullname === "" ? "" : engineer.fullname
+  const email = engineer.email === null || engineer.email === "" ? "" : engineer.email
   const birthdate = typeof engineer.birthdate !== "undefined" && engineer.birthdate !== null ? moment(engineer.birthdate).format("D MMMM YYYY") : ""
-  const location = engineer.location === null ? "" : engineer.location
-  const telephone = engineer.telephone === null ? "" : engineer.telephone
-  const showcase = engineer.showcase === null ? "" : engineer.showcase
-  const salary = engineer.salary === null ? "" : engineer.salary
-  const description = engineer.description === null ? "" : engineer.description
+  const location = engineer.location === null || engineer.location === "" ? "" : engineer.location
+  const telephone = engineer.telephone === null || engineer.telephone === "" ? "" : engineer.telephone
+  const showcase = engineer.showcase === null || engineer.showcase === "" ? "" : engineer.showcase
+  const salary = engineer.salary === null || engineer.salary === "" ? "" : engineer.salary
+  const description = engineer.description === null || engineer.description === "" ? "" : EditorState.createWithContent(convertFromRaw(JSON.parse(engineer.description)))
   const skills = engineer.skills
   return (
     <div>
@@ -106,7 +109,11 @@ const ProfileItem = ({ engineer }) => {
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <p> {description} </p>
+                <Editor
+                  toolbarHidden={true}
+                  readOnly={true}
+                  editorState={description}
+                /> 
               </Paper>
             </Grid>
             <Grid item md={4} xs={12}>
@@ -119,7 +126,7 @@ const ProfileItem = ({ engineer }) => {
               <div className="mt-6">
                 <Paper className={classes.paper}>
                   <p className="mb-2">Expected Salary</p>
-                  <p>{salary}</p>
+                  <span className="card-salary">{salary}</span>
                 </Paper>
               </div>
             </Grid>

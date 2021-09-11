@@ -4,11 +4,14 @@ import { useDispatch } from "react-redux"
 import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete"
 import { Container, Chip, Grid, Button, TextField, Avatar, Badge, makeStyles } from "@material-ui/core"
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers"
-import { isImage, bytesToSize, Toast } from "../../../../../utils/helper"
+import { isImage, bytesToSize, Toast } from "@utils/helper"
+import { Editor } from "react-draft-wysiwyg"
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 import RemoveIcon from "@material-ui/icons/RemoveCircleOutlineSharp"
 import Autocomplete from "@material-ui/lab/Autocomplete"
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined"
 import * as moment from "moment"
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import MaskedInput from "react-text-mask"
 import NumberFormat from "react-number-format"
 import DateFnsUtils from "@date-io/date-fns"
@@ -76,11 +79,13 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [location, setLocation] = useState("")
+  const [uploadedImages, setUploadedImages] = useState([])
   const [avatarNotEdited, setAvatarNotEdited] = useState("")
   const [avatarDefault, setDefaultAvatar] = useState("")
   const [avatarFile, setAvatarFile] = useState("")
   const [skillsSelectedMask, setSkills] = useState([])
   const [skillsSelectedDestroy, setSkillsDestroy] = useState([])
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [formData, setFormData] = useState({
     uid: "",
     fullname: "",
@@ -107,6 +112,7 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
     engineer.birthdate === null ? setSelectedDate(moment(new Date()).format("YYYY-MM-DD")) : setSelectedDate(moment(engineer.birthdate).format("YYYY-MM-DD"))
     setDefaultAvatar(`${process.env.NEXT_PUBLIC_IMAGES_ENGINEER}/${engineer.avatar}`)
     setAvatarNotEdited(engineer.avatar)
+    engineer.description === null || engineer.description === "" ? setEditorState("") : setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(engineer.description))))
     setSkills(engineer.skills)
   }, [engineer])
   const renderedSkills = skillsSelectedMask && skillsSelectedMask.map((option, i) => {
@@ -141,9 +147,28 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       console.log(err)
     }
   }
+  const uploadImageCallBack = (file) => {
+    const imageObject = {
+      file: file,
+      localSrc: URL.createObjectURL(file),
+    }
+
+    uploadedImages.push(imageObject);
+
+    setUploadedImages(uploadedImages)
+
+    return new Promise(
+      (resolve, reject) => {
+        resolve({ data: { link: imageObject.localSrc } });
+      }
+    );
+  }
   const handleFile = _ => {
     fileRef.click()
   }
+  const onEditorStateChange = (editorState) => {
+    setEditorState(editorState)
+  };
   const handleAvatar = ev => {
     if (ev.target.files && ev.target.files[0]) {
       let size = bytesToSize(ev.target.files[0].size)
@@ -192,7 +217,7 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       fd.set("nickname", nickname)
       fd.set("email", email)
       fd.set("birthdate", convertDate)
-      fd.set("description", description)
+      fd.set("description", JSON.stringify(convertToRaw(editorState.getCurrentContent())))
       fd.set("skillsStore", JSON.stringify(skillsSelectedMask))
       fd.set("skillsDestroy", JSON.stringify(skillsSelectedDestroy))
       fd.set("showcase", showcase)
@@ -245,7 +270,26 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
               <TextField onChange={onChange} value={fullname} name="fullname" margin="normal" variant="outlined" label="Fullname" fullWidth />
               <TextField onChange={onChange} value={nickname} name="nickname" margin="normal" variant="outlined" label="Nickname" fullWidth />
               <TextField onChange={onChange} value={email} name="email" margin="normal" variant="outlined" label="E-mail Address" fullWidth disabled />
-              <TextField onChange={onChange} value={description} multiline rows="4" name="description" margin="normal" variant="outlined" label="Description" fullWidth />
+              <div style={{
+                "border": "1px solid rgba(0, 0, 0, 0.35)",
+                "borderRadius": "4px"
+              }}>
+                <Editor
+                  editorState={editorState}      
+                  toolbar={{ 
+                    image: {
+                    uploadCallback: uploadImageCallBack,
+                    previewImage: true,
+                    alt: { present: true, mandatory: false },
+                    inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+                    }
+                  }}
+                  toolbarClassName="toolbarClassName"
+                  wrapperClassName="wrapperClassName"
+                  editorClassName="editorClassName"
+                  onEditorStateChange={onEditorStateChange}
+                />
+              </div>
               <Autocomplete
                 multiple
                 filterSelectedOptions
@@ -315,3 +359,5 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
 }
 
 export default ProfileEditItem
+
+

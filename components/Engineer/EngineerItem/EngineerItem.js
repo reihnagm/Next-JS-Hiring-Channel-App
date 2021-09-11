@@ -14,7 +14,6 @@ const EngineerItem = ({ engineers }) => {
   const [offset, setOffset] = useState(0)
   
   useEffect(() => {
-    console.log(engineersCount)
     const fetchData = () => { 
       setTimeout(() => {  
         dispatch(getEngineersMoreData(searchN, showN, sortN, filterByN, offset))

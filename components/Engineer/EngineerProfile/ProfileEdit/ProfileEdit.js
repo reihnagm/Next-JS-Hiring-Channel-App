@@ -12,12 +12,8 @@ const ProfileEdit = ( ) => {
   const { engineer, loading } = useSelector(state => state.engineer)
   const { skills } = useSelector(state => state.skill)
   useEffect(() => {
-    let current = true
     dispatch(getCurrentProfileEngineer())
     dispatch(getSkills())
-    return () => {
-      current = false
-    }
   }, [])  
   return loading ? (
     <Spinner />
