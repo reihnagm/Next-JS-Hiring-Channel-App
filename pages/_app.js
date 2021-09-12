@@ -5,16 +5,54 @@ import { loadUser } from "@redux/actions/auth"
 import { ThemeProvider } from "@material-ui/core/styles"
 import { Provider } from "react-redux"
 import { createWrapper } from "next-redux-wrapper"
-import Head from "next/head"
+import { store, persistor } from "@redux/store"
+import LocalStorageService from "@utils/localstorage"
 import Router from "next/router"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import theme from "../configs/theme"
-import setAuthToken from "../utils/token"
-import { store, persistor } from "@redux/store"
+import axios from "axios"
 
-if (typeof window !== "undefined" && window.localStorage.token) {
-  setAuthToken(typeof window !== "undefined" && window.localStorage.token)
-}
+let localStorageService = LocalStorageService.getService()
+
+axios.interceptors.request.use(
+  config => {
+    if(localStorageService.getAccessToken()) {
+      config.headers['x-auth-token'] = localStorageService.getAccessToken()
+    }
+    return config
+  },
+  e => {
+    Promise.reject(e)
+  }
+)
+
+axios.interceptors.response.use(
+  response => {
+    return response
+  },
+  async (e) => {
+    if(e.response.status === 401) {
+      if(localStorageService.getRefreshToken()) {
+        return axios.get(process.env.NEXT_PUBLIC_REFRESH_TOKEN, {
+          headers: {
+            "x-auth-token": localStorageService.getRefreshToken()
+          }            
+        }).then((res) => {
+          localStorage.setItem('access_token', res.data.refresh_token)
+          localStorage.setItem('refresh_token', res.data.refresh_token)
+          return axios(e.response.config);
+        })
+      }
+    }
+    if(e.response.status === 500 && e.response.data.message == "jwt expired") {
+      localStorage.setItem('access_token', localStorageService.getRefreshToken())
+      localStorage.setItem('refresh_token', localStorageService.getRefreshToken())
+      return axios(e.response.config);
+    }
+  }
+)
+
+
 /* Class Component */
 
 // class MyApp extends App {

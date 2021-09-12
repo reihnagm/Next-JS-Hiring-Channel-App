@@ -1,32 +1,36 @@
 const LocalStorageService = (function () {
-  let _service
-  function _getService() {
-    if (!_service) {
-      _service = this
-      return _service
+  let service
+  function getService() {
+    if (!service) {
+      service = this
+      return service
     }
-    return _service
+    return service
   }
-  function _setToken(tokenObj) {
-    localStorage.setItem(`access_token`, tokenObj.access_token)
-    localStorage.setItem(`refresh_token`, tokenObj.refresh_token)
+  function setToken(tokenObj) {
+    localStorage.setItem("access_token", tokenObj.access_token)
+    localStorage.setItem("refresh_token", tokenObj.refresh_token)
   }
-  function _getAccessToken() {
-    return localStorage.getItem(`access_token`)
+  function getAccessToken() {
+    return typeof window !== "undefined" && window.localStorage.access_token
   }
-  function _getRefreshToken() {
-    return localStorage.getItem(`refresh_token`)
+  function getRefreshToken() {
+    return typeof window !== "undefined" && window.localStorage.refresh_token
   }
-  function _clearToken() {
-    localStorage.removeItem(`access_token`)
-    localStorage.removeItem(`refresh_token`)
+  function clearAccessToken() {
+    localStorage.removeItem("access_token")
+  }
+  function clearAllToken() {
+    localStorage.removeItem("access_token")
+    localStorage.removeItem("refresh_token")
   }
   return {
-    getService: _getService,
-    setToken: _setToken,
-    getAccessToken: _getAccessToken,
-    getRefreshToken: _getRefreshToken,
-    clearToken: _clearToken
+    getService: getService,
+    setToken: setToken,
+    getAccessToken: getAccessToken,
+    getRefreshToken: getRefreshToken,
+    clearAccessToken: clearAccessToken,
+    clearAllToken: clearAllToken
   }
 })()
 export default LocalStorageService
