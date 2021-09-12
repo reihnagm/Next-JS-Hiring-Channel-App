@@ -1,19 +1,15 @@
 import axios from "axios"
 import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from "./types"
-import setAuthToken from "../../utils/token"
-import { Toast } from "../../utils/helper"
+import { Toast } from "@utils/helper"
 
 export const loadUser = () => async dispatch => {
-  if (typeof window !== "undefined" && window.localStorage.token) {
-    setAuthToken(typeof window !== "undefined" && window.localStorage.token)
-  }
   try {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_AUTH}`)
     dispatch({
       type: USER_LOADED,
       payload: response.data.data
     })
-  } catch (err) {
+  } catch (_) {
     dispatch({
       type: AUTH_ERROR
     })
@@ -30,16 +26,16 @@ export const login = (email, pass, router) => async dispatch => {
       type: LOGIN_SUCCESS,
       payload: response.data
     })
+    dispatch(loadUser())
     Toast.fire({
       icon: "success",
       title: "Successful Login"
     })
-    dispatch(loadUser())
     router.push("/")
-  } catch (err) {
+  } catch (e) {
     Toast.fire({
       icon: "error",
-      title: err.response.data.message
+      title: e.response.data.message
     })
     dispatch({
       type: LOGIN_FAIL
@@ -66,10 +62,10 @@ export const registerEngineer = (fullname, nickname, email, password, role, rout
     })
     dispatch(loadUser())
     router.push("/")
-  } catch (err) {
+  } catch (e) {
     Toast.fire({
       icon: "error",
-      title: err.response.data.message
+      title: e.response.data.message
     })
     dispatch({
       type: REGISTER_FAIL
