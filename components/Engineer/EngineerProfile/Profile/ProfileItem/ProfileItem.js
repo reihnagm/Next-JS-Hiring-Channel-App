@@ -1,18 +1,19 @@
 import React from "react"
 import * as moment from "moment"
-import dynamic from "next/dynamic"
 import { Container, Grid, Paper, Button, Avatar, makeStyles } from "@material-ui/core"
 import { useRouter } from "next/router"
-import { Editor } from "react-draft-wysiwyg"
-import { EditorState, convertFromRaw } from 'draft-js'
+import Output from "editorjs-react-renderer";
+// import { Editor } from "react-draft-wysiwyg"
+// import { EditorState, convertFromRaw } from 'draft-js'
+import dynamic from "next/dynamic"
 import PersonIcon from "@material-ui/icons/Person"
 import EmailIcon from "@material-ui/icons/Email"
 import CakeIcon from "@material-ui/icons/Cake"
 import PhoneIcon from "@material-ui/icons/Phone"
 import LocationOnIcon from "@material-ui/icons/LocationOn"
 import SlideshowIcon from "@material-ui/icons/Slideshow"
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
-const ProfileSkillsItem = dynamic(() => import("../../ProfileSkillsItem/ProfileSkillsItem"), {
+// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+const ProfileSkillsItem = dynamic(() => import("@components/Engineer/EngineerProfile/ProfileSkillsItem/ProfileSkillsItem"), {
   ssr: false
 })
 
@@ -23,8 +24,7 @@ const ProfileItem = ({ engineer }) => {
       flexGrow: 1
     },
     paper: {
-      padding: theme.spacing(2),
-      position: "relative"
+      padding: theme.spacing(2),  
     },
     avatar: {
       width: theme.spacing(10),
@@ -41,8 +41,10 @@ const ProfileItem = ({ engineer }) => {
   const telephone = engineer.telephone === null || engineer.telephone === "" ? "" : engineer.telephone
   const showcase = engineer.showcase === null || engineer.showcase === "" ? "" : engineer.showcase
   const salary = engineer.salary === null || engineer.salary === "" ? "" : engineer.salary
-  const description = engineer.description === null || engineer.description === "" ? "" : EditorState.createWithContent(convertFromRaw(JSON.parse(engineer.description)))
+  // const description = engineer.description === null || engineer.description === "" ? "" : EditorState.createWithContent(convertFromRaw(JSON.parse(engineer.description)))
+  const description = engineer.description === null || engineer.description === "" ? "" : JSON.parse(engineer.description)
   const skills = engineer.skills
+
   return (
     <div>
       <div className="backdrop-top"></div>
@@ -109,21 +111,16 @@ const ProfileItem = ({ engineer }) => {
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <Editor
-                  toolbarHidden={true}
-                  readOnly={true}
-                  editorState={description}
-                /> 
+                <Output data={description} /> 
               </Paper>
             </Grid>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
                 <p className="mb-2">
-                  Skills
                   <ProfileSkillsItem items={skills} />
                 </p>
               </Paper>
-              <div className="mt-6">
+              <div className="mt-4">
                 <Paper className={classes.paper}>
                   <p className="mb-2">Expected Salary</p>
                   <span className="card-salary">{salary}</span>

@@ -35,7 +35,7 @@ axios.interceptors.response.use(
       if(localStorageService.getRefreshToken()) {
         return axios.get(process.env.NEXT_PUBLIC_REFRESH_TOKEN, {
           headers: {
-            "x-auth-token": localStorageService.getRefreshToken()
+            'x-auth-token': localStorageService.getRefreshToken()
           }            
         }).then((res) => {
           localStorage.setItem('access_token', res.data.refresh_token)
@@ -44,7 +44,7 @@ axios.interceptors.response.use(
         })
       }
     }
-    if(e.response.status === 500 && e.response.data.message == "jwt expired") {
+    if(e.response.status === 500 && e.response.data.message == 'jwt expired') {
       localStorage.setItem('access_token', localStorageService.getRefreshToken())
       localStorage.setItem('refresh_token', localStorageService.getRefreshToken())
       return axios(e.response.config);

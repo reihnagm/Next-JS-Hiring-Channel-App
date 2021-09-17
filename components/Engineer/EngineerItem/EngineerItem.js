@@ -3,10 +3,13 @@ import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
 import { Container, Grid, makeStyles, Card, CardActionArea, CardContent, CardMedia, Typography } from "@material-ui/core"
 import { getEngineersMoreData } from "@redux/actions/engineer"
-import InfiniteScroll from "react-infinite-scroll-component"
-import ProfileSkillsItem from "@components/Engineer/EngineerProfile/ProfileSkillsItem/ProfileSkillsItem"
+import Spinner from "@components/Spinner/Spinner"
 import { LOADING_MORE_DATA, LOADED_MORE_DATA } from "@redux/actions/types"
-
+import InfiniteScroll from "react-infinite-scroll-component"
+import dynamic from "next/dynamic"
+const ProfileSkillsItem = dynamic(() => import("@components/Engineer/EngineerProfile/ProfileSkillsItem/ProfileSkillsItem"), {
+  ssr: false
+})
 const EngineerItem = ({ engineers }) => {
   const router = useRouter()
   const dispatch = useDispatch()
@@ -30,15 +33,16 @@ const EngineerItem = ({ engineers }) => {
 
   const useStyles = makeStyles({
     root: {
-      maxWidth: 250,
+      maxWidth: 280,
       margin: 10
     },
     textCenter: {
       textAlign: "center",
+      fontWeight: "normal",
       fontSize: "20px"
     },
     media: {
-      height: 200
+      height: 180
     }
   })
   const classes = useStyles()
@@ -56,10 +60,17 @@ const EngineerItem = ({ engineers }) => {
             dispatch({
               type: LOADED_MORE_DATA
             }) 
-           
         }}
         hasMore={loadingMoreData} 
-        loader={<h1 className={classes.textCenter}>Loading...</h1>}>
+        loader={
+          <div className="flex justify-c-center">
+            <div className="spinner spinner-loader">
+              <span className="spinner-item-loader"></span>
+              <span className="spinner-item-loader"></span>
+              <span className="spinner-item-loader"></span>
+            </div>
+          </div>
+        }>
         <Grid container direction="row" justify="start" alignItems="center">
           {engineers.map((engineer, i) => {
             return (
@@ -67,14 +78,15 @@ const EngineerItem = ({ engineers }) => {
                 <CardActionArea onClick={() => router.push(`/engineers/profile?slug=${engineer.slug}`)}>
                   <CardMedia className={classes.media} image={`${process.env.NEXT_PUBLIC_IMAGES_ENGINEER}/${engineer.avatar}`} title={engineer.slug} />
                   <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
+                    <Typography gutterBottom variant="h5" component="h5">
                       {engineer.fullname}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                      Expected Salary : {engineer.salary === null ||engineer.salary == "" ? "" : <span className="card-salary"> {engineer.salary} </span> } 
+                    {engineer.salary === null ||engineer.salary == "" ? "" : <span>
+                      Expected Salary : <span className="card-salary">{engineer.salary}</span>
+                    </span> } 
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                      Skills :
                       <ProfileSkillsItem items={engineer.skills} />
                     </Typography>
                   </CardContent>

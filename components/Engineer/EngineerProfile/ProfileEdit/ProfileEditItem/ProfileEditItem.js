@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from "react"
+import React, { useRef, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useDispatch } from "react-redux"
 import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete"
 import { Container, Chip, Grid, Button, TextField, Avatar, Badge, makeStyles } from "@material-ui/core"
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers"
 import { isImage, bytesToSize, Toast } from "@utils/helper"
-import { Editor } from "react-draft-wysiwyg"
-import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
-import RemoveIcon from "@material-ui/icons/RemoveCircleOutlineSharp"
-import Autocomplete from "@material-ui/lab/Autocomplete"
-import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined"
+import { EDITOR_JS_TOOLS } from "@utils/tools"
+// import { Editor } from "react-draft-wysiwyg"
+// import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
+// import EditorJS from '@editorjs/editorjs';
+// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+import EditorJs from "react-editor-js"
+import RemoveIcon from '@material-ui/icons/RemoveCircleOutlineSharp'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined'
 import * as moment from "moment"
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import MaskedInput from "react-text-mask"
 import NumberFormat from "react-number-format"
-import DateFnsUtils from "@date-io/date-fns"
+import DateFnsUtils from "@date-io/date-fns" 
 
 const renderFunction = ({ getInputProps, suggestions, getSuggestionItemProps }) => (
   <div>
@@ -72,10 +75,12 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       height: theme.spacing(10)
     }
   }))
+  const instanceRef = useRef(null)
   let fileRef
   const router = useRouter()
   const dispatch = useDispatch()
   const classes = useStyles()
+  const [flag, setFlag] = useState(false);
   const [isOpen, setIsOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [location, setLocation] = useState("")
@@ -85,7 +90,8 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
   const [avatarFile, setAvatarFile] = useState("")
   const [skillsSelectedMask, setSkills] = useState([])
   const [skillsSelectedDestroy, setSkillsDestroy] = useState([])
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+  const [data, setData] = useState({})
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [formData, setFormData] = useState({
     uid: "",
     fullname: "",
@@ -112,9 +118,17 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
     engineer.birthdate === null ? setSelectedDate(moment(new Date()).format("YYYY-MM-DD")) : setSelectedDate(moment(engineer.birthdate).format("YYYY-MM-DD"))
     setDefaultAvatar(`${process.env.NEXT_PUBLIC_IMAGES_ENGINEER}/${engineer.avatar}`)
     setAvatarNotEdited(engineer.avatar)
-    engineer.description === null || engineer.description === "" ? setEditorState("") : setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(engineer.description))))
+    // engineer.description === null || engineer.description === "" ? setEditorState("") : setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(engineer.description))))
+    engineer.description === null || engineer.description === "" ? setData({}) : setData(JSON.parse(engineer.description))
     setSkills(engineer.skills)
-  }, [engineer])
+    // new EditorJS({ 
+    //   holder: instanceRef.current
+    // })
+    setFlag(true)
+    _ => {
+      setFlag(!flag);
+    }
+  },[engineer, flag, setFlag])
   const renderedSkills = skillsSelectedMask && skillsSelectedMask.map((option, i) => {
     return (
       <span className={classes.chip} key={i}>
@@ -152,23 +166,20 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       file: file,
       localSrc: URL.createObjectURL(file),
     }
-
     uploadedImages.push(imageObject);
-
     setUploadedImages(uploadedImages)
-
     return new Promise(
       (resolve, reject) => {
-        resolve({ data: { link: imageObject.localSrc } });
+        resolve({ data: { link: imageObject.localSrc } })
       }
-    );
+    )
   }
+  // const onEditorStateChange = (editorState) => {
+  //   setEditorState(editorState)
+  // }  
   const handleFile = _ => {
     fileRef.click()
   }
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState)
-  };
   const handleAvatar = ev => {
     if (ev.target.files && ev.target.files[0]) {
       let size = bytesToSize(ev.target.files[0].size)
@@ -194,7 +205,7 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       }
     }
   }
-  const onSubmit = ev => {
+  const onSubmit = async ev => {
     ev.preventDefault()
     let convertDate = moment(selectedDate).format("YYYY-MM-DD")
     let avatar
@@ -217,7 +228,7 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       fd.set("nickname", nickname)
       fd.set("email", email)
       fd.set("birthdate", convertDate)
-      fd.set("description", JSON.stringify(convertToRaw(editorState.getCurrentContent())))
+      fd.set("description", JSON.stringify(await instanceRef.current.save()))       // JSON.stringify(convertToRaw(editorState.getCurrentContent()))
       fd.set("skillsStore", JSON.stringify(skillsSelectedMask))
       fd.set("skillsDestroy", JSON.stringify(skillsSelectedDestroy))
       fd.set("showcase", showcase)
@@ -270,26 +281,44 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
               <TextField onChange={onChange} value={fullname} name="fullname" margin="normal" variant="outlined" label="Fullname" fullWidth />
               <TextField onChange={onChange} value={nickname} name="nickname" margin="normal" variant="outlined" label="Nickname" fullWidth />
               <TextField onChange={onChange} value={email} name="email" margin="normal" variant="outlined" label="E-mail Address" fullWidth disabled />
-              <div style={{
-                "border": "1px solid rgba(0, 0, 0, 0.35)",
-                "borderRadius": "4px"
-              }}>
-                <Editor
-                  editorState={editorState}      
-                  toolbar={{ 
-                    image: {
-                    uploadCallback: uploadImageCallBack,
-                    previewImage: true,
-                    alt: { present: true, mandatory: false },
-                    inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
-                    }
-                  }}
-                  toolbarClassName="toolbarClassName"
-                  wrapperClassName="wrapperClassName"
-                  editorClassName="editorClassName"
-                  onEditorStateChange={onEditorStateChange}
-                />
-              </div>
+              
+              
+              
+              {/* 
+
+                Alternative use Editor JS
+
+                <div style={{
+                  "border": "1px solid rgba(0, 0, 0, 0.35)",
+                  "borderRadius": "4px"
+                  <Editor
+                    editorState={editorState}      
+                    toolbar={{ 
+                      image: {
+                      uploadCallback: uploadImageCallBack,
+                      previewImage: true,
+                      alt: { present: true, mandatory: false },
+                      inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+                      }
+                    }}
+                    toolbarClassName="toolbarClassName"
+                    wrapperClassName="wrapperClassName"
+                    editorClassName="editorClassName"
+                    onEditorStateChange={onEditorStateChange}
+                  /> 
+                </div> 
+
+                */}
+             
+                
+              
+              { flag && <EditorJs 
+                autofocus
+                instanceRef={(instance) => (instanceRef.current = instance)}
+                data={data}
+                minHeight={60}
+                tools={EDITOR_JS_TOOLS}/> }
+                
               <Autocomplete
                 multiple
                 filterSelectedOptions
