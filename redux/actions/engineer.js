@@ -102,7 +102,9 @@ export const updateProfileEngineer = (payload, router) => async dispatch => {
       type: UPDATE_PROFILE_ENGINEER
     })
     dispatch(loadUser())
-    window.location.href = '/engineers'
+    setTimeout(() => {
+      router.push("/engineers")
+    }, 1500)
   } catch (e) {
     dispatch({
       type: UPDATE_PROFILE_ENGINEER_ERROR,

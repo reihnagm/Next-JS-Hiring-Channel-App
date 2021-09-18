@@ -81,9 +81,12 @@ const EngineerItem = ({ engineers }) => {
                     <Typography gutterBottom variant="h5" component="h5">
                       {engineer.fullname}
                     </Typography>
+                    <Typography gutterBottom variant="h6" component="h6">
+                      {engineer.job_title}
+                    </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
                     {engineer.salary === null ||engineer.salary == "" ? "" : <span>
-                      Expected Salary : <span className="card-salary">{engineer.salary}</span>
+                      Expected Salary <span className="card-salary">{engineer.salary}</span>
                     </span> } 
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
