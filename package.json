@@ -30,6 +30,8 @@
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^4.1.0",
     "history": "^4.10.1",
+    "inputmask": "^5.0.6",
+    "material-ui-dots": "^2.0.2",
     "moment": "^2.29.1",
     "next": "10.0.6",
     "next-redux-wrapper": "^6.0.2",

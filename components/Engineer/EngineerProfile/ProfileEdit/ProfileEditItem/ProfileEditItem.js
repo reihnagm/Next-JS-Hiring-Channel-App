@@ -6,11 +6,8 @@ import { Container, Chip, Grid, Button, TextField, Avatar, Badge, makeStyles } f
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers"
 import { isImage, bytesToSize, Toast } from "@utils/helper"
 import { EDITOR_JS_TOOLS } from "@utils/tools"
-// import { Editor } from "react-draft-wysiwyg"
-// import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
-// import EditorJS from '@editorjs/editorjs';
-// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import EditorJs from "react-editor-js"
+import Inputmask from "inputmask"
 import RemoveIcon from '@material-ui/icons/RemoveCircleOutlineSharp'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined'
@@ -75,26 +72,25 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       height: theme.spacing(10)
     }
   }))
-  const instanceRef = useRef(null)
+  const editorJsRef = useRef(null)
   let fileRef
   const router = useRouter()
   const dispatch = useDispatch()
   const classes = useStyles()
-  const [flag, setFlag] = useState(false);
+  const [flag, setFlag] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [location, setLocation] = useState("")
-  const [uploadedImages, setUploadedImages] = useState([])
   const [avatarNotEdited, setAvatarNotEdited] = useState("")
   const [avatarDefault, setDefaultAvatar] = useState("")
   const [avatarFile, setAvatarFile] = useState("")
   const [skillsSelectedMask, setSkills] = useState([])
   const [skillsSelectedDestroy, setSkillsDestroy] = useState([])
   const [data, setData] = useState({})
-  // const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [formData, setFormData] = useState({
     uid: "",
     fullname: "",
+    jobtitle: "",
     nickname: "",
     email: "",
     description: "",
@@ -107,6 +103,7 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
     setFormData({
       uid: engineer.uid === null ? "" : engineer.uid,
       fullname: engineer.fullname === null ? "" : engineer.fullname,
+      jobtitle: engineer.job_title === null ? "" : engineer.job_title,
       nickname: engineer.nickname === null ? "" : engineer.nickname,
       email: engineer.email === null ? "" : engineer.email,
       description: engineer.description === null ? "" : engineer.description,
@@ -121,14 +118,14 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
     // engineer.description === null || engineer.description === "" ? setEditorState("") : setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(engineer.description))))
     engineer.description === null || engineer.description === "" ? setData({}) : setData(JSON.parse(engineer.description))
     setSkills(engineer.skills)
-    // new EditorJS({ 
-    //   holder: instanceRef.current
-    // })
+    let selector = document.getElementById("showcase")
+    Inputmask("url").mask(selector)
     setFlag(true)
     _ => {
-      setFlag(!flag);
+      setFlag(false);
     }
-  },[engineer, flag, setFlag])
+  },[engineer])
+  
   const renderedSkills = skillsSelectedMask && skillsSelectedMask.map((option, i) => {
     return (
       <span className={classes.chip} key={i}>
@@ -143,7 +140,7 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       </span>
     )
   })
-  const { uid, fullname, nickname, email, description, showcase, telephone, salary } = formData
+  const { uid, fullname, jobtitle, nickname, email, showcase, telephone, salary } = formData
   const onChange = ev => {
     setFormData({ ...formData, [ev.target.name]: ev.target.value })
   }
@@ -153,6 +150,7 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
   const handleChange = address => {
     setLocation(address)
   }
+
   const handleSelect = async address => {
     try {
       const results = await geocodeByAddress(address)
@@ -161,22 +159,6 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       console.log(err)
     }
   }
-  const uploadImageCallBack = (file) => {
-    const imageObject = {
-      file: file,
-      localSrc: URL.createObjectURL(file),
-    }
-    uploadedImages.push(imageObject);
-    setUploadedImages(uploadedImages)
-    return new Promise(
-      (resolve, reject) => {
-        resolve({ data: { link: imageObject.localSrc } })
-      }
-    )
-  }
-  // const onEditorStateChange = (editorState) => {
-  //   setEditorState(editorState)
-  // }  
   const handleFile = _ => {
     fileRef.click()
   }
@@ -187,22 +169,25 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       let reader = new FileReader()
       try {
         if (size > process.env.NEXT_PUBLIC_SIZE_IMAGE) {
-          throw new Error("File size cannot larger than 1MB")
+          Toast.fire({
+            icon: "error",
+            title: err.message
+          })
+          return
         }
         if (!isImage(ext)) {
-          throw new Error("File type allowed: PNG, JPG, JPEG, GIF, SVG, BMP")
+          Toast.fire({
+            icon: "error",
+            title: "File type allowed: PNG, JPG, JPEG, GIF, SVG, BMP"
+          })
+          return
         }
         setAvatarFile(ev.target.files[0])
         reader.onload = e => {
           setDefaultAvatar(e.target.result)
         }
         reader.readAsDataURL(ev.target.files[0])
-      } catch (err) {
-        Toast.fire({
-          icon: "error",
-          title: err.message
-        })
-      }
+      } catch (_) { }
     }
   }
   const onSubmit = async ev => {
@@ -216,19 +201,34 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
     }
     try {
       if (fullname.trim() === "") {
-        throw new Error("Fullname Required")
+        Toast.fire({
+          icon: "error",
+          title: "Fullname Required"
+        })
+        return
+      }
+      if(jobtitle.trim() === "") {
+        return Toast.fire({
+          icon: "error",
+          title: "Job Title Required"
+        }) 
       }
       if (nickname.trim() === "") {
-        throw new Error("Nickname Required")
+        Toast.fire({
+          icon: "error",
+          title: "Nickname Required"
+        })
+        return
       }
       let fd = new FormData()
       fd.set("uid", uid)
       fd.set("avatar", avatar)
       fd.set("fullname", fullname)
+      fd.set("jobTitle", jobtitle)
       fd.set("nickname", nickname)
       fd.set("email", email)
       fd.set("birthdate", convertDate)
-      fd.set("description", JSON.stringify(await instanceRef.current.save()))       // JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+      fd.set("description", JSON.stringify(await editorJsRef.current.save())) 
       fd.set("skillsStore", JSON.stringify(skillsSelectedMask))
       fd.set("skillsDestroy", JSON.stringify(skillsSelectedDestroy))
       fd.set("showcase", showcase)
@@ -236,12 +236,7 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
       fd.set("salary", salary)
       fd.set("location", location)
       dispatch(updateProfileEngineer(fd, router))
-    } catch (err) {
-      Toast.fire({
-        icon: "error",
-        title: err.message
-      })
-    }
+    } catch (_) {}
   }
   return (
     <>
@@ -279,46 +274,15 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
                 </Badge>
               </div>
               <TextField onChange={onChange} value={fullname} name="fullname" margin="normal" variant="outlined" label="Fullname" fullWidth />
+              <TextField onChange={onChange} value={jobtitle} name="jobtitle" margin="normal" variant="outlined" label="Job Title" fullWidth />
               <TextField onChange={onChange} value={nickname} name="nickname" margin="normal" variant="outlined" label="Nickname" fullWidth />
               <TextField onChange={onChange} value={email} name="email" margin="normal" variant="outlined" label="E-mail Address" fullWidth disabled />
-              
-              
-              
-              {/* 
-
-                Alternative use Editor JS
-
-                <div style={{
-                  "border": "1px solid rgba(0, 0, 0, 0.35)",
-                  "borderRadius": "4px"
-                  <Editor
-                    editorState={editorState}      
-                    toolbar={{ 
-                      image: {
-                      uploadCallback: uploadImageCallBack,
-                      previewImage: true,
-                      alt: { present: true, mandatory: false },
-                      inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
-                      }
-                    }}
-                    toolbarClassName="toolbarClassName"
-                    wrapperClassName="wrapperClassName"
-                    editorClassName="editorClassName"
-                    onEditorStateChange={onEditorStateChange}
-                  /> 
-                </div> 
-
-                */}
-             
-                
-              
               { flag && <EditorJs 
                 autofocus
-                instanceRef={(instance) => (instanceRef.current = instance)}
+                instanceRef={(instance) => (editorJsRef.current = instance)}
                 data={data}
                 minHeight={60}
                 tools={EDITOR_JS_TOOLS}/> }
-                
               <Autocomplete
                 multiple
                 filterSelectedOptions
@@ -368,8 +332,8 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
                   open={isOpen}
                 />
               </MuiPickersUtilsProvider>
-              <TextField onChange={onChange} value={showcase} name="showcase" margin="normal" variant="outlined" label="Showcase" fullWidth />
-              <MaskedInput mask={["(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]} placeholderChar={"_"} onChange={onChange} render={(ref, props) => <TextField value={telephone} name="telephone" margin="normal" variant="outlined" label="Telephone" fullWidth inputRef={ref} {...props} />} />
+              <TextField id="showcase" onChange={onChange} value={showcase} name="showcase" margin="normal" variant="outlined" label="Showcase" fullWidth /> 
+              <MaskedInput keepCharPositions mask={["(", /[1-9]/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]} placeholderChar={"\u2000"} onChange={onChange} render={(ref, props) => <TextField value={telephone} name="telephone" margin="normal" variant="outlined" label="Telephone" fullWidth inputRef={ref} {...props} />} />
               <NumberFormat onChange={onChange} value={salary} name="salary" margin="normal" variant="outlined" label="salary" decimalSeparator="," thousandSeparator="." prefix="Rp " allowNegative={false} customInput={TextField} fullWidth />
               <Grid container direction="row" justify="center" alignItems="center">
                 <Button type="button" variant="contained" color="primary" onClick={() => router.back()} >

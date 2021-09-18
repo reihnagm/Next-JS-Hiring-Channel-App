@@ -4,6 +4,7 @@ import { ServerStyleSheets } from "@material-ui/core/styles"
 
 export default class MyDocument extends Document {
   render() {
+    // Inputmask("url").mask(test)
     return (
       <Html lang="en">
         <Head>
@@ -17,9 +18,9 @@ export default class MyDocument extends Document {
           {/* Google Font Nunito */}
           <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@600;900&display=swap" />
           {/* Google Maps API */} 
-          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFRpXPf8BXaR22nDvvx2ghBfbUbGGX8N8&libraries=places"></script>
+          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFRpXPf8BXaR22nDvvx2ghBfbUbGGX8N8&libraries=places"></script> 
         </Head>
-        <body>
+        <body>  
           <Main />
           <NextScript />
         </body>
@@ -27,10 +28,10 @@ export default class MyDocument extends Document {
     )
   }
 }
-
 // `getInitialProps` belongs to `_document` (instead of `_app`),
 // it's compatible with server-side generation (SSG).
 MyDocument.getInitialProps = async ctx => {
+
   // Resolution order
   //
   // On the server:

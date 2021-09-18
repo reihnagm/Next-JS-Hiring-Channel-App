@@ -3,8 +3,6 @@ import * as moment from "moment"
 import { Container, Grid, Paper, Button, Avatar, makeStyles } from "@material-ui/core"
 import { useRouter } from "next/router"
 import Output from "editorjs-react-renderer";
-// import { Editor } from "react-draft-wysiwyg"
-// import { EditorState, convertFromRaw } from 'draft-js'
 import dynamic from "next/dynamic"
 import PersonIcon from "@material-ui/icons/Person"
 import EmailIcon from "@material-ui/icons/Email"
@@ -12,7 +10,6 @@ import CakeIcon from "@material-ui/icons/Cake"
 import PhoneIcon from "@material-ui/icons/Phone"
 import LocationOnIcon from "@material-ui/icons/LocationOn"
 import SlideshowIcon from "@material-ui/icons/Slideshow"
-// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 const ProfileSkillsItem = dynamic(() => import("@components/Engineer/EngineerProfile/ProfileSkillsItem/ProfileSkillsItem"), {
   ssr: false
 })
@@ -35,6 +32,7 @@ const ProfileItem = ({ engineer }) => {
   const classes = useStyles()
   const avatar = engineer.avatar === null || engineer.avatar === "" ? "" : engineer.avatar 
   const fullname = engineer.fullname === null || engineer.fullname === "" ? "" : engineer.fullname
+  const jobTitle = engineer.job_title === null || engineer.job_title === "" ? "" : engineer.job_title
   const email = engineer.email === null || engineer.email === "" ? "" : engineer.email
   const birthdate = typeof engineer.birthdate !== "undefined" && engineer.birthdate !== null ? moment(engineer.birthdate).format("D MMMM YYYY") : ""
   const location = engineer.location === null || engineer.location === "" ? "" : engineer.location
@@ -53,7 +51,14 @@ const ProfileItem = ({ engineer }) => {
           <Grid container spacing={3}>
             <Grid item md={4} xs={12}>
               <Paper className={classes.paper}>
-                <Avatar className={classes.avatar} src={`${process.env.NEXT_PUBLIC_IMAGES_ENGINEER}/${avatar}`} alt={fullname} />
+                <Grid container>
+                  <Grid item md={4} xs={2}>
+                    <Avatar className={classes.avatar} src={`${process.env.NEXT_PUBLIC_IMAGES_ENGINEER}/${avatar}`} alt={fullname} />
+                  </Grid>
+                  <Grid className="d-flex align-s-center" item md={8} xs={10}>
+                    <p> {jobTitle} </p>
+                  </Grid>
+                </Grid>
                 <Grid container>
                   <Grid item md={2} xs={2}>
                     <PersonIcon />

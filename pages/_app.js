@@ -9,7 +9,7 @@ import { store, persistor } from "@redux/store"
 import LocalStorageService from "@utils/localstorage"
 import Router from "next/router"
 import CssBaseline from "@material-ui/core/CssBaseline"
-import theme from "../configs/theme"
+import theme from "@configs/theme"
 import axios from "axios"
 
 let localStorageService = LocalStorageService.getService()
