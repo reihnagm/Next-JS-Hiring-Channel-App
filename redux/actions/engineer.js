@@ -1,9 +1,9 @@
 import axios from "axios"
-import { store } from "../store.js"
-import { Toast } from "../../utils/helper"
+import { store } from "@redux/store"
+import { Toast } from "@utils/helper"
 import { loadUser } from "./auth"
 // import { logout } from "./auth"
-import { LOADING, LOADED, LOADING_MORE_DATA, LOADED_MORE_DATA, GET_ENGINEERS, GET_ENGINEERS_ERROR, GET_MORE_DATA, GET_MORE_DATA_ERROR, GET_CURRENT_PROFILE_ENGINEER, GET_CURRENT_PROFILE_ENGINEER_ERROR, GET_PROFILE_ENGINEER_BY_SLUG, GET_PROFILE_ENGINEER_BY_SLUG_ERROR, UPDATE_PROFILE_ENGINEER, UPDATE_PROFILE_ENGINEER_ERROR } from "./types"
+import { LOADING, LOADED, LOADING_MORE_DATA, LOADED_MORE_DATA, ADD_ENGINEERS_PORTFOLIO, ADD_ENGINEERS_PORTFOLIO_ERROR, ERROR_ENGINEERS_PORTFOLIO_ERROR, GET_ENGINEERS, GET_ENGINEERS_ERROR, GET_MORE_DATA, GET_MORE_DATA_ERROR, GET_CURRENT_PROFILE_ENGINEER, GET_CURRENT_PROFILE_ENGINEER_ERROR, GET_PROFILE_ENGINEER_BY_SLUG, GET_PROFILE_ENGINEER_BY_SLUG_ERROR, UPDATE_PROFILE_ENGINEER, UPDATE_PROFILE_ENGINEER_ERROR } from "./types"
 
 export const getEngineers = (searchN, showN, sortN, filterByN) => async dispatch => {
   try {
@@ -25,6 +25,7 @@ export const getEngineers = (searchN, showN, sortN, filterByN) => async dispatch
     })
   }
 }
+
 export const getEngineersMoreData = (searchN, showN, sortN, filterByN, offset) => async dispatch => {
   try {
     dispatch({
@@ -45,6 +46,7 @@ export const getEngineersMoreData = (searchN, showN, sortN, filterByN, offset) =
     })
   }
 }
+
 export const getCurrentProfileEngineer = () => async dispatch => {
   try {
     dispatch({
@@ -65,6 +67,7 @@ export const getCurrentProfileEngineer = () => async dispatch => {
     })
   }
 }
+
 export const getProfileEngineerBySlug = slug => async dispatch => {
   try {
     dispatch({
@@ -85,6 +88,7 @@ export const getProfileEngineerBySlug = slug => async dispatch => {
     })
   }
 }
+
 export const updateProfileEngineer = (payload, router) => async dispatch => {
   try {
     dispatch({
@@ -111,6 +115,54 @@ export const updateProfileEngineer = (payload, router) => async dispatch => {
       payload: e
     })
   }
+}
+
+export const addPortfolioEngineer = (payload, router) => async dispatch => {
+  try {
+    dispatch({
+      type: LOADING
+    })    
+    await axios.post(`${process.env.NEXT_PUBLIC_GET_ENGINEERS}/add/portfolio`, payload)
+    dispatch({
+      type: LOADED
+    })
+    Toast.fire({
+      icon: "success",
+      title: "Successfully Add Portfolio"
+    })
+    dispatch({
+      type: ADD_ENGINEERS_PORTFOLIO,
+      payload: e
+    })
+    setTimeout(() => {
+      router.push("/engineers")
+    }, 1500)
+  } catch(e) {
+    dispatch({
+      type: ADD_ENGINEERS_PORTFOLIO_ERROR,
+      payload: e
+    })
+  }
+}
+
+export const getPortfolio = (engineerUid) => async dispatch => {
+  try {
+    dispatch({
+      type: LOADING
+    })
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_GET_ENGINEERS}/portfolio`, {
+      "engineerUid": engineerUid
+    })
+    console.log(response)
+    dispatch({
+      type: LOADED
+    })
+  } catch(e) {
+    dispatch({
+      type: ERROR_ENGINEERS_PORTFOLIO_ERROR,
+      payload: e
+    })
+  } 
 }
 // export const deleteProfileEngineer = (engineer_id, user_id) => async dispatch => {
 //   store.dispatch(logout())

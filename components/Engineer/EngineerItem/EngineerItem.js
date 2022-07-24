@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
 import { Container, Grid, makeStyles, Card, CardActionArea, CardContent, CardMedia, Typography } from "@material-ui/core"
 import { getEngineersMoreData } from "@redux/actions/engineer"
-import Spinner from "@components/Spinner/Spinner"
 import { LOADING_MORE_DATA, LOADED_MORE_DATA } from "@redux/actions/types"
 import InfiniteScroll from "react-infinite-scroll-component"
 import dynamic from "next/dynamic"
@@ -18,9 +17,7 @@ const EngineerItem = ({ engineers }) => {
   
   useEffect(() => {
     const fetchData = () => { 
-      setTimeout(() => {  
-        dispatch(getEngineersMoreData(searchN, showN, sortN, filterByN, offset))
-      }, 1500) 
+      dispatch(getEngineersMoreData(searchN, showN, sortN, filterByN, offset))
     }
     if(offset > 0) {
       fetchData()

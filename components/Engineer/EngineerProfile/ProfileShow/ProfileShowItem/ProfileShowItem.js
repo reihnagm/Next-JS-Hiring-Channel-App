@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { Container, Grid, Paper, Button, makeStyles } from "@material-ui/core"
 import { useRouter } from "next/router"
-import SwipeableViews from "react-swipeable-views";
-import { autoPlay } from 'react-swipeable-views-utils';
-import Output from "editorjs-react-renderer";
+import { autoPlay } from "react-swipeable-views-utils"
+import SwipeableViews from "react-swipeable-views"
+import Output from "editorjs-react-renderer"
 import dynamic from "next/dynamic"
 import * as moment from "moment"
 import Dots from "material-ui-dots"
@@ -14,11 +14,12 @@ import PhoneIcon from "@material-ui/icons/Phone"
 import LocationOnIcon from "@material-ui/icons/LocationOn"
 import SlideshowIcon from "@material-ui/icons/Slideshow"
 import AvatarComponent from "@components/Avatar/Avatar"
+import "react-image-gallery/styles/css/image-gallery.css";
 const ProfileSkillsItem = dynamic(() => import("@components/Engineer/EngineerProfile/ProfileSkillsItem/ProfileSkillsItem"), {
   ssr: false
 })
 
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 const ProfileShowItem = ({ engineer }) => {
   const useStyles = makeStyles(theme => ({
@@ -72,6 +73,22 @@ const ProfileShowItem = ({ engineer }) => {
   const onChangeIndex = (i) => {
     setIndex(i)
   }
+
+  const images = [
+    {
+      original: 'https://picsum.photos/id/1018/1000/600/',
+      thumbnail: 'https://picsum.photos/id/1018/250/150/',
+    },
+    {
+      original: 'https://picsum.photos/id/1015/1000/600/',
+      thumbnail: 'https://picsum.photos/id/1015/250/150/',
+    },
+    {
+      original: 'https://picsum.photos/id/1019/1000/600/',
+      thumbnail: 'https://picsum.photos/id/1019/250/150/',
+    },
+  ];
+
 
   return (
     <>
@@ -188,6 +205,17 @@ const ProfileShowItem = ({ engineer }) => {
                   </div>
                 </Paper>
               </div>
+              {/* <div className="mt-4">
+                <Paper classes={classes.paper}>
+                  
+                  <ImageGallery
+                    autoPlay
+                    slideDuration={450}
+                    slideInterval={2000}
+                    showPlayButton={false}
+                    items={images} />
+                </Paper>
+              </div> */}
             </Grid>
           </Grid>
         </div>

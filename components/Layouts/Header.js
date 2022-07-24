@@ -7,7 +7,6 @@ import Image from "next/image"
 import AvatarComponent from "@components/Avatar/Avatar"
 import MenuIcon from '@material-ui/icons/Menu'
 import SearchIcon from "@material-ui/icons/Search"
-
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
 import ListItem from '@material-ui/core/ListItem'
@@ -117,6 +116,9 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
         <>
           <MenuItem className="text-black" onClick={() => router.push("/engineers/profile")}>
             Profile
+          </MenuItem>
+          <MenuItem className="text-black" onClick={() => router.push("/engineers/portfolio/add")}>
+            Add Portfolio
           </MenuItem>
           <MenuItem className="text-black" onClick={() => router.push("/engineers/profile/edit")}>
             Edit Profile
@@ -310,7 +312,14 @@ const Header = ({ handleSearchEngineer, handleSearchCompany }) => {
             <span
               className="text-black mx-3 cursor-pointer"
               onClick={() => {
-                router.push("/engineers")
+                router.push({
+                  pathname: '/engineers',
+                  query: {
+                    show: 10,
+                    sort: 'newer',
+                    filterBy: 'latest-update'
+                  },
+                })
               }}
             >
               Engineers

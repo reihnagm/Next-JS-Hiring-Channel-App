@@ -4,17 +4,15 @@ import { ServerStyleSheets } from "@material-ui/core/styles"
 
 export default class MyDocument extends Document {
   render() {
-    // Inputmask("url").mask(test)
     return (
-      <Html lang="en">
+      <Html>
         <Head>
-          <meta charSet="utf-8" />
-          <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           {/* Favicon */}
           <link rel="shortcut icon" href="/assets/images/favicon/favicon.ico" />
           {/* main CSS */}
           <link rel="stylesheet" href="/assets/css/main.css" />
+          {/* Lineicons */}
+          <link href="https://cdn.lineicons.com/3.0/lineicons.css" rel="stylesheet" />
           {/* Google Font Nunito */}
           <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@600;900&display=swap" />
           {/* Google Maps API */} 

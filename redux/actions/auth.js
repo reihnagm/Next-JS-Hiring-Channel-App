@@ -19,8 +19,8 @@ export const loadUser = () => async dispatch => {
 export const login = (email, pass, router) => async dispatch => {
   try {
     const response = await axios.post(`${process.env.NEXT_PUBLIC_LOGIN}`, {
-      email,
-      pass
+      email: email,
+      pass: pass
     })
     dispatch({
       type: LOGIN_SUCCESS,
@@ -33,10 +33,6 @@ export const login = (email, pass, router) => async dispatch => {
     })
     router.push("/")
   } catch (e) {
-    Toast.fire({
-      icon: "error",
-      title: e.response.data.message
-    })
     dispatch({
       type: LOGIN_FAIL
     })

@@ -3,12 +3,13 @@ import { Route, Switch } from "react-router-dom"
 import Register from "@/pages/register"
 import Login from "@pages/auth/login"
 import Page404 from "@components/Layouts/Page404"
-import Engineer from "../../pages/engineer"
-import EngineerProfile from "../Engineer/EngineerProfile/EngineerProfile"
-import EngineerProfileShow from "../Engineer/EngineerProfile/ProfileShow/ProfileShow"
-import EngineerProfileEdit from "../Engineer/EngineerProfile/ProfileEdit/ProfileEdit"
-import Company from "../../pages/company"
-import CompanyProfile from "@components/Company/CompanyProfile/CompanyProfile"
+import Engineer from "@/pages/engineer"
+import EngineerPortfolioAdd from "@components/Engineer/EngineerPortfolio/PortfolioAdd/PortfolioAdd"
+import EngineerProfile from "@components/Engineer/EngineerProfile/Profile"
+import EngineerProfileShow from "@components/Engineer/EngineerProfile/ProfileShow/ProfileShow"
+import EngineerProfileEdit from "@components/Engineer/EngineerProfile/ProfileEdit/ProfileEdit"
+import Company from "@/pages/company"
+import CompanyProfile from "@components/Company/CompanyProfile/Profile"
 import AddJob from "@components/Company/CompanyProfile/AddJob/AddJob"
 import EditJob from "@components/Company/CompanyProfile/EditJob/EditJob"
 import CompanyProfileDetail from "@components/Company/CompanyProfile/ProfileDetail/ProfileDetail"
@@ -31,6 +32,7 @@ const Routes = () => {
       <Private path="/companies/profile/me/edit" exact component={CompanyProfileEdit} />
       {/* Engineer Route */}
       <Route path="/engineers" exact component={Engineer} />
+      <Route path="/engineers/portfolio/add" exact component={EngineerPortfolioAdd} />
       <Route path="/engineers/profile/:slug" exact component={EngineerProfileShow} />
       {/* Private Engineer Route  */}
       <Private path="/engineers/profile" exact component={EngineerProfile} />

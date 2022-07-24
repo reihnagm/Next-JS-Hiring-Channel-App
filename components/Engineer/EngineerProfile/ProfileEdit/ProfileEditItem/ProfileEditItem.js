@@ -8,9 +8,9 @@ import { isImage, bytesToSize, Toast } from "@utils/helper"
 import { EDITOR_JS_TOOLS } from "@utils/tools"
 import EditorJs from "react-editor-js"
 import Inputmask from "inputmask"
-import RemoveIcon from '@material-ui/icons/RemoveCircleOutlineSharp'
-import Autocomplete from '@material-ui/lab/Autocomplete'
-import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined'
+import RemoveIcon from "@material-ui/icons/RemoveCircleOutlineSharp"
+import Autocomplete from "@material-ui/lab/Autocomplete"
+import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined"
 import * as moment from "moment"
 import MaskedInput from "react-text-mask"
 import NumberFormat from "react-number-format"
@@ -80,10 +80,10 @@ const ProfileEditItem = ({ engineer, allSkills, updateProfileEngineer }) => {
   const [flag, setFlag] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const [location, setLocation] = useState("")
-  const [avatarNotEdited, setAvatarNotEdited] = useState("")
-  const [avatarDefault, setDefaultAvatar] = useState("")
-  const [avatarFile, setAvatarFile] = useState("")
+  const [location, setLocation] = useState()
+  const [avatarNotEdited, setAvatarNotEdited] = useState()
+  const [avatarDefault, setDefaultAvatar] = useState()
+  const [avatarFile, setAvatarFile] = useState()
   const [skillsSelectedMask, setSkills] = useState([])
   const [skillsSelectedDestroy, setSkillsDestroy] = useState([])
   const [data, setData] = useState({})

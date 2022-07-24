@@ -6,6 +6,7 @@ import { ThemeProvider } from "@material-ui/core/styles"
 import { Provider } from "react-redux"
 import { createWrapper } from "next-redux-wrapper"
 import { store, persistor } from "@redux/store"
+import { Toast } from "@utils/helper"
 import LocalStorageService from "@utils/localstorage"
 import Router from "next/router"
 import CssBaseline from "@material-ui/core/CssBaseline"
@@ -31,6 +32,12 @@ axios.interceptors.response.use(
     return response
   },
   async (e) => {
+    if(e.response.data.status != 401) {
+      Toast.fire({
+        icon: "error",
+        title: e.response.data.message
+      })
+    }
     if(e.response.status === 401) {
       if(localStorageService.getRefreshToken()) {
         return axios.get(process.env.NEXT_PUBLIC_REFRESH_TOKEN, {

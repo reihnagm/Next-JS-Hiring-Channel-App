@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { getEngineers } from "@redux/actions/engineer"
 import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
@@ -12,14 +12,24 @@ const EngineerList = dynamic(() => import("@components/Engineer/EngineerList/Eng
 const Index = ({ handleSearch, handleFilterBy, handleSort, handleShow }) => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { engineers, loading, searchN, showN, sortN, filterByN } = useSelector(state => state.engineer)
+  const { engineers, loading, searchN, showN, filterByN, sortN } = useSelector(state => state.engineer)
+
   useEffect(() => {
-    async function fetchData() {
-      dispatch(await getEngineers(searchN, showN, sortN, filterByN))
-    }
-    fetchData()
-    router.push(`/engineers?show=${showN}&sort=${sortN}&filterby=${filterByN}`, undefined, { shallow: true })
-  }, [searchN, showN, sortN, filterByN])
+    if(!router.isReady) return;
+    dispatch(getEngineers(searchN, showN, sortN, filterByN))
+    dispatch({
+      type: CHANGE_FILTER_SHOW,
+      payload: parseInt(router.query.show)
+    })
+    dispatch({
+      type: CHANGE_FILTER_SORT,
+      payload: router.query.sort
+    })
+    dispatch({
+      type: CHANGE_FILTER_FILTERBY,
+      payload: router.query.filterBy
+    })
+  }, [router, searchN, showN, sortN, filterByN])
 
   handleSearch = search => {
     dispatch({
@@ -27,22 +37,46 @@ const Index = ({ handleSearch, handleFilterBy, handleSort, handleShow }) => {
       payload: search
     })
   }
-  handleFilterBy = filterBy => {
+  handleFilterBy = filterByParam => {
+    router.push({
+      pathname: "/engineers",
+      query: {
+        show: showN,
+        sort: sortN,
+        filterBy: filterByParam
+      },
+    })
     dispatch({
       type: CHANGE_FILTER_FILTERBY,
-      payload: filterBy
+      payload: filterByParam
     })
   }
-  handleSort = sort => {
+  handleSort = sortParam => {
+    router.push({
+      pathname: "/engineers",
+      query: {
+        show: showN,
+        sort: sortParam,
+        filterBy: filterByN
+      },
+    })
     dispatch({
       type: CHANGE_FILTER_SORT,
-      payload: sort
+      payload: sortParam
     })
   }
-  handleShow = show => {
+  handleShow = showParam => {
+    router.push({
+      pathname: "/engineers",
+      query: {
+        show: showParam,
+        sort: sortN,
+        filterBy: filterByN
+      },
+    })
     dispatch({
       type: CHANGE_FILTER_SHOW,
-      payload: parseInt(show)
+      payload: parseInt(showParam)
     })
   }
 

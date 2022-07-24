@@ -16,9 +16,9 @@ const ProfileEdit = ( ) => {
     dispatch(getCurrentProfileEngineer())
     dispatch(getSkills())
   }, [])  
-  return loading ? (
-    <Spinner />
-  ) : (
+  return loading 
+  ? <Spinner />
+  : (
     <>
       <div className="backdrop-bottom"></div>
       <ProfileEditItem engineer={engineer} allSkills={skills} updateProfileEngineer={updateProfileEngineer} />

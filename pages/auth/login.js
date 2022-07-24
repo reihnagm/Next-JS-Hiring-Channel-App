@@ -71,12 +71,7 @@ const Login = () => {
         return 
       }
       dispatch(login(email, password, router))
-    } catch (e) {
-      Toast.fire({
-        icon: "error",
-        title: e.message
-      })
-    }
+    } catch (_) { }
   }
 
   if (isAuthenticated) {

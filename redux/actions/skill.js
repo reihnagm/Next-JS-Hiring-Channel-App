@@ -13,10 +13,10 @@ export const getSkills = () => async dispatch => {
       type: GET_SKILLS,
       payload: response.data.data
     })
-  } catch (error) {
+  } catch (e) {
     dispatch({
       type: GET_SKILLS_ERROR,
-      payload: error
+      payload: e
     })
   }
 }
